@@ -1,0 +1,50 @@
+#-*- encoding: utf-8; mode: yaml -*-
+
+#=========================================================================
+# Copyright (c) 2015 Matt Bogosian <mtb19@columbia.edu>.
+#
+# Please see the accompanying LICENSE (or LICENSE.txt) file for rights and
+# restrictions governing use of this software. All rights not expressly
+# waived or licensed are reserved. If such a file did not accompany this
+# software, then please contact the author before viewing or using this
+# software in any capacity.
+#=========================================================================
+
+language: python
+python: "3.4"
+
+install:
+    - pip install coveralls tox
+
+# Grrr; <https://github.com/travis-ci/travis-ci/issues/1519> is closed
+# without a fix
+env:
+    - TOX_ENV=py27-twisted_15_3
+    - TOX_ENV=py27-twisted_15_4
+    - TOX_ENV=py27-twisted_trunk
+
+    - TOX_ENV=pypy-twisted_15_3
+    - TOX_ENV=pypy-twisted_15_4
+    - TOX_ENV=pypy-twisted_trunk
+
+    - TOX_ENV=py33-twisted_15_3
+    - TOX_ENV=py33-twisted_15_4
+    - TOX_ENV=py33-twisted_trunk
+
+    - TOX_ENV=py34-twisted_15_3
+    - TOX_ENV=py34-twisted_15_4
+    - TOX_ENV=py34-twisted_trunk
+
+matrix:
+    allow_failures:
+        # Twisted trunk is experimental
+        - env: TOX_ENV=py27-twisted_trunk
+        - env: TOX_ENV=pypy-twisted_trunk
+        - env: TOX_ENV=py33-twisted_trunk
+        - env: TOX_ENV=py34-twisted_trunk
+
+script:
+    - tox -e "${TOX_ENV}"
+
+after_success:
+    - coveralls
