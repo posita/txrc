@@ -22,12 +22,12 @@ If such a file did not accompany this software, then please contact the author b
 .. |LICENSE.txt| replace:: ``LICENSE.txt``
 .. _`LICENSE.txt`: LICENSE
 
-.. image:: https://travis-ci.org/posita/txrc.svg?branch=master
-    :target: https://travis-ci.org/posita/txrc?branch=master
+.. image:: https://travis-ci.org/posita/txrc.svg?branch=v0.1.0
+    :target: https://travis-ci.org/posita/txrc?branch=v0.1.0
     :alt: [Build Status]
 
-.. image:: https://coveralls.io/repos/posita/txrc/badge.svg?branch=master
-    :target: https://coveralls.io/r/posita/txrc?branch=master
+.. image:: https://coveralls.io/repos/posita/txrc/badge.svg?branch=v0.1.0
+    :target: https://coveralls.io/r/posita/txrc?branch=v0.1.0
     :alt: [Coverage Status]
 
 Curious about integrating your project with the above services?
@@ -43,8 +43,8 @@ Jeff Knupp (|@jeffknupp|_) `describes how <https://www.jeffknupp.com/blog/2013/0
     :target: https://pypi.python.org/pypi/txrc/
     :alt: [Latest Version]
 
-.. image:: https://readthedocs.org/projects/txrc/badge/?version=master
-    :target: https://txrc.readthedocs.org/en/master/
+.. image:: https://readthedocs.org/projects/txrc/badge/?version=v0.1.0
+    :target: https://txrc.readthedocs.org/en/v0.1.0/
     :alt: [Documentation]
 
 .. image:: https://pypip.in/license/txrc/badge.svg
@@ -52,15 +52,15 @@ Jeff Knupp (|@jeffknupp|_) `describes how <https://www.jeffknupp.com/blog/2013/0
     :alt: [License]
 
 .. image:: https://pypip.in/py_versions/txrc/badge.svg
-    :target: https://pypi.python.org/pypi/txrc/master
+    :target: https://pypi.python.org/pypi/txrc/0.1.0
     :alt: [Supported Python Versions]
 
 .. image:: https://pypip.in/implementation/txrc/badge.svg
-    :target: https://pypi.python.org/pypi/txrc/master
+    :target: https://pypi.python.org/pypi/txrc/0.1.0
     :alt: [Supported Python Implementations]
 
 .. image:: https://pypip.in/status/txrc/badge.svg
-    :target: https://pypi.python.org/pypi/txrc/master
+    :target: https://pypi.python.org/pypi/txrc/0.1.0
     :alt: [Development Stage]
 
 ..
@@ -70,13 +70,6 @@ It is based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11
 It is licensed under the `MIT License <https://opensource.org/licenses/MIT>`_.
 Source code is `available on GitHub <https://github.com/posita/txrc>`__.
 See `the docs <https://txrc.readthedocs.org/en/master/>`__ for more information.
-
-Examples
---------
-
-.. TODO
-
-Coming soon.
 
 Issues
 ------
