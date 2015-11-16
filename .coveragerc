@@ -20,4 +20,3 @@ omit =
     */lib_pypy/*
     */site-packages/*
     tests/*
-    txretry/tls.py

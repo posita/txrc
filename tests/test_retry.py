@@ -32,7 +32,7 @@ from twisted.internet import defer as t_defer
 from twisted.internet import task as t_task
 from twisted.trial import unittest as t_unittest
 
-from txretry.retry import (
+from txrc.retry import (
     RetryingCaller,
     TimeoutError,
     calltimeout,

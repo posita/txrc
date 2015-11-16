@@ -13,7 +13,7 @@
 Copyright |(c)| 2015 `Matt Bogosian`_ (|@posita|_).
 
 .. |(c)| unicode:: u+a9
-.. _`Matt Bogosian`: mailto:mtb19@columbia.edu?Subject=txretry
+.. _`Matt Bogosian`: mailto:mtb19@columbia.edu?Subject=txrc
 .. |@posita| replace:: **@posita**
 .. _`@posita`: https://github.com/posita
 
@@ -29,7 +29,7 @@ If such a file did not accompany this software, then please contact the author b
 Introduction
 ============
 
-``txretry`` is a :doc:`pure Python module <modules>` for retrying calls in `Twisted`_.
+``txrc`` is a :doc:`pure Python module <modules>` for retrying calls in `Twisted`_.
 It is based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/>`__.
 
 .. _`Twisted`: https://twistedmatrix.com/
@@ -37,26 +37,26 @@ It is based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11
 License
 -------
 
-``txretry`` is licensed under the `MIT License <https://opensource.org/licenses/MIT>`_.
-Source code is `available on GitHub <https://github.com/posita/txretry>`__.
+``txrc`` is licensed under the `MIT License <https://opensource.org/licenses/MIT>`_.
+Source code is `available on GitHub <https://github.com/posita/txrc>`__.
 
 Installation
 ------------
 
-Installation can be performed via ``pip`` (which will download and install the `latest release <https://pypi.python.org/pypi/txretry/>`__):
+Installation can be performed via ``pip`` (which will download and install the `latest release <https://pypi.python.org/pypi/txrc/>`__):
 
 .. code-block:: sh
 
-    % pip install txretry
+    % pip install txrc
     ...
 
-Alternately, you can download the sources (e.g., `from GitHub <https://github.com/posita/txretry>`__) and run ``setup.py``:
+Alternately, you can download the sources (e.g., `from GitHub <https://github.com/posita/txrc>`__) and run ``setup.py``:
 
 .. code-block:: sh
 
-    % git clone https://github.com/posita/txretry
+    % git clone https://github.com/posita/txrc
     ...
-    % cd txretry
+    % cd txrc
     % python setup.py install
     ...
 
@@ -73,7 +73,7 @@ A modern version of Python is required:
 
 Python 2.6 will *not* work.
 
-``txretry`` has the following dependencies (which will be installed automatically):
+``txrc`` has the following dependencies (which will be installed automatically):
 
 *   |future|_
 

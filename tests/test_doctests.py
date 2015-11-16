@@ -32,7 +32,7 @@ from os import path
 import re
 import types
 
-import txretry
+import txrc
 import tests
 
 #---- Constants ----------------------------------------------------------
@@ -45,7 +45,7 @@ __all__ = (
 _PATH_RE = r'(' + re.escape(path.sep) + r'.*)?$'
 
 _DOCTEST_ROOTS = (
-    txretry,
+    txrc,
     tests,
 )
 

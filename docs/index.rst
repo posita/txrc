@@ -9,7 +9,7 @@
 Copyright |(c)| 2015 `Matt Bogosian`_ (|@posita|_).
 
 .. |(c)| unicode:: u+a9
-.. _`Matt Bogosian`: mailto:mtb19@columbia.edu?Subject=txretry
+.. _`Matt Bogosian`: mailto:mtb19@columbia.edu?Subject=txrc
 .. |@posita| replace:: **@posita**
 .. _`@posita`: https://github.com/posita
 
@@ -22,10 +22,10 @@ If such a file did not accompany this software, then please contact the author b
 .. |LICENSE.txt| replace:: ``LICENSE.txt``
 .. _`LICENSE.txt`: _sources/LICENSE.txt
 
-``txretry`` - Twisted Retrying Caller Inspired by Terry Jones
-=============================================================
+``txrc`` - Twisted Retrying Caller Inspired by Terry Jones
+==========================================================
 
-``txretry`` enables retrying calls in `Twisted <https://twistedmatrix.com/>`_.
+``txrc`` enables retrying calls in `Twisted <https://twistedmatrix.com/>`_.
 It is based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/>`__.
 It is licensed under the `MIT License <https://opensource.org/licenses/MIT>`_.
 

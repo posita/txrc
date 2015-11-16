@@ -6,7 +6,7 @@
   It looks like crap in a text editor, but it has no effect on rendering, and it allows much more useful diffs.
   Thank you! -->
 
-Copyright © 2015 [Matt Bogosian](mailto:mtb19@columbia.edu?Subject=txretry) ([**@posita**](https://github.com/posita)).
+Copyright © 2015 [Matt Bogosian](mailto:mtb19@columbia.edu?Subject=txrc) ([**@posita**](https://github.com/posita)).
 
 Please see the accompanying [`LICENSE`](LICENSE) (or [`LICENSE.txt`](LICENSE)) file for rights and restrictions governing use of this software.
 All rights not expressly waived or licensed are reserved.
@@ -14,13 +14,13 @@ If such a file did not accompany this software, then please contact the author b
 
 - [ ] `git checkout -b X.Y.Z-release`
 
-- [ ] Set version in [`txretry/version.py`](txretry/version.py)
+- [ ] Set version in [`txrc/version.py`](txrc/version.py)
 
 ```diff
-diff --git a/txretry/version.py b/txretry/version.py
+diff --git a/txrc/version.py b/txrc/version.py
 index 0123456..fedcba9 100644
---- a/txretry/version.py
-+++ b/txretry/version.py
+--- a/txrc/version.py
++++ b/txrc/version.py
 @@ -25,5 +25,5 @@ from __future__ import (
 
  __all__ = ()
@@ -31,7 +31,7 @@ index 0123456..fedcba9 100644
 +__release__ = 'vX.Y.Z'
 ```
 
-- [ ] Set version in [`README.rst`](README.rst) (`master` → `vX.Y.Z`, except for [`https://pypi.python.org/pypi/txretry/X.Y.Z`](https://pypi.python.org/pypi/txretry/X.Y.Z))
+- [ ] Set version in [`README.rst`](README.rst) (`master` → `vX.Y.Z`, except for [`https://pypi.python.org/pypi/txrc/X.Y.Z`](https://pypi.python.org/pypi/txrc/X.Y.Z))
 
 - [ ] `git commit -a -m 'Update version and release vX.Y.Z.'`
 
@@ -39,7 +39,7 @@ index 0123456..fedcba9 100644
 
 - [ ] `./setup.py sdist upload`
 
-- [ ] Upload `txretry.egg-info/PKG-INFO` to [`https://pypi.python.org/pypi?:action=submit_form&name=txretry&version=X.Y.Z`](https://pypi.python.org/pypi?:action=submit_form&name=txretry&version=X.Y.Z) (work-around)
+- [ ] Upload `txrc.egg-info/PKG-INFO` to [`https://pypi.python.org/pypi?:action=submit_form&name=txrc&version=X.Y.Z`](https://pypi.python.org/pypi?:action=submit_form&name=txrc&version=X.Y.Z) (work-around)
 
 - [ ] `git checkout master`
 

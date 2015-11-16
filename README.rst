@@ -9,7 +9,7 @@
 Copyright |(c)| 2015 `Matt Bogosian`_ (|@posita|_).
 
 .. |(c)| unicode:: u+a9
-.. _`Matt Bogosian`: mailto:mtb19@columbia.edu?Subject=txretry
+.. _`Matt Bogosian`: mailto:mtb19@columbia.edu?Subject=txrc
 .. |@posita| replace:: **@posita**
 .. _`@posita`: https://github.com/posita
 
@@ -22,12 +22,12 @@ If such a file did not accompany this software, then please contact the author b
 .. |LICENSE.txt| replace:: ``LICENSE.txt``
 .. _`LICENSE.txt`: LICENSE
 
-.. image:: https://travis-ci.org/posita/txretry.svg?branch=master
-    :target: https://travis-ci.org/posita/txretry?branch=master
+.. image:: https://travis-ci.org/posita/txrc.svg?branch=master
+    :target: https://travis-ci.org/posita/txrc?branch=master
     :alt: [Build Status]
 
-.. image:: https://coveralls.io/repos/posita/txretry/badge.svg?branch=master
-    :target: https://coveralls.io/r/posita/txretry?branch=master
+.. image:: https://coveralls.io/repos/posita/txrc/badge.svg?branch=master
+    :target: https://coveralls.io/r/posita/txrc?branch=master
     :alt: [Coverage Status]
 
 Curious about integrating your project with the above services?
@@ -36,40 +36,40 @@ Jeff Knupp (|@jeffknupp|_) `describes how <https://www.jeffknupp.com/blog/2013/0
 .. |@jeffknupp| replace:: **@jeffknupp**
 .. _`@jeffknupp`: https://github.com/jeffknupp
 
-``txretry`` - Twisted Retrying Caller Inspired by Terry Jones
-=============================================================
+``txrc`` - Twisted Retrying Caller Inspired by Terry Jones
+==========================================================
 
-.. image:: https://pypip.in/version/txretry/badge.svg
-    :target: https://pypi.python.org/pypi/txretry/
+.. image:: https://pypip.in/version/txrc/badge.svg
+    :target: https://pypi.python.org/pypi/txrc/
     :alt: [Latest Version]
 
-.. image:: https://readthedocs.org/projects/txretry/badge/?version=master
-    :target: https://txretry.readthedocs.org/en/master/
+.. image:: https://readthedocs.org/projects/txrc/badge/?version=master
+    :target: https://txrc.readthedocs.org/en/master/
     :alt: [Documentation]
 
-.. image:: https://pypip.in/license/txretry/badge.svg
+.. image:: https://pypip.in/license/txrc/badge.svg
     :target: https://opensource.org/licenses/MIT
     :alt: [License]
 
-.. image:: https://pypip.in/py_versions/txretry/badge.svg
-    :target: https://pypi.python.org/pypi/txretry/master
+.. image:: https://pypip.in/py_versions/txrc/badge.svg
+    :target: https://pypi.python.org/pypi/txrc/master
     :alt: [Supported Python Versions]
 
-.. image:: https://pypip.in/implementation/txretry/badge.svg
-    :target: https://pypi.python.org/pypi/txretry/master
+.. image:: https://pypip.in/implementation/txrc/badge.svg
+    :target: https://pypi.python.org/pypi/txrc/master
     :alt: [Supported Python Implementations]
 
-.. image:: https://pypip.in/status/txretry/badge.svg
-    :target: https://pypi.python.org/pypi/txretry/master
+.. image:: https://pypip.in/status/txrc/badge.svg
+    :target: https://pypi.python.org/pypi/txrc/master
     :alt: [Development Stage]
 
 ..
 
-``txretry`` enables retrying calls in `Twisted <https://twistedmatrix.com/>`_.
+``txrc`` enables retrying calls in `Twisted <https://twistedmatrix.com/>`_.
 It is based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/>`__.
 It is licensed under the `MIT License <https://opensource.org/licenses/MIT>`_.
-Source code is `available on GitHub <https://github.com/posita/txretry>`__.
-See `the docs <https://txretry.readthedocs.org/en/master/>`__ for more information.
+Source code is `available on GitHub <https://github.com/posita/txrc>`__.
+See `the docs <https://txrc.readthedocs.org/en/master/>`__ for more information.
 
 Examples
 --------
@@ -81,5 +81,5 @@ Coming soon.
 Issues
 ------
 
-If you find a bug, or want a feature, please `file an issue <https://github.com/posita/txretry/issues>`__ (if it hasn't already been filed).
-If you're willing and able, consider `contributing <https://txretry.readthedocs.org/en/master/contrib.html>`__.
+If you find a bug, or want a feature, please `file an issue <https://github.com/posita/txrc/issues>`__ (if it hasn't already been filed).
+If you're willing and able, consider `contributing <https://txrc.readthedocs.org/en/master/contrib.html>`__.

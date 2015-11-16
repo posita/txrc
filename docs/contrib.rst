@@ -13,7 +13,7 @@
 Copyright |(c)| 2015 `Matt Bogosian`_ (|@posita|_).
 
 .. |(c)| unicode:: u+a9
-.. _`Matt Bogosian`: mailto:mtb19@columbia.edu?Subject=txretry
+.. _`Matt Bogosian`: mailto:mtb19@columbia.edu?Subject=txrc
 .. |@posita| replace:: **@posita**
 .. _`@posita`: https://github.com/posita
 
@@ -26,15 +26,15 @@ If such a file did not accompany this software, then please contact the author b
 .. |LICENSE.txt| replace:: ``LICENSE.txt``
 .. _`LICENSE.txt`: _sources/LICENSE.txt
 
-Contributing to ``txretry``
-==============================
+Contributing to ``txrc``
+========================
 
 There are several ways you can contribute.
 
 Filing Issues
 -------------
 
-You can `file new issues <https://github.com/posita/txretry/issues>`__ as you find them.
+You can `file new issues <https://github.com/posita/txrc/issues>`__ as you find them.
 Please avoid duplicating issues.
 These may be helpful:
 
@@ -44,7 +44,7 @@ These may be helpful:
 Submission Guidelines
 ---------------------
 
-If you're willing and able, consider `submitting a pull request <https://github.com/posita/txretry/pulls>`__ (PR) with a fix.
+If you're willing and able, consider `submitting a pull request <https://github.com/posita/txrc/pulls>`__ (PR) with a fix.
 There are only a few guidelines:
 
 *   If it isn't already there, please add your name (and optionally your GitHub username, email, website address, or other contact information) to the ``CREDITS`` file::

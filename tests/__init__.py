@@ -35,15 +35,15 @@ from twisted.internet import (
     defer as t_defer,
 )
 
-from txretry.logging import SILENT
+from txrc.logging import SILENT
 
 #---- Constants ----------------------------------------------------------
 
 __all__ = ()
 
-_LOG_LVL = os.environ.get('_TXRETRY_LOG_LVL')
+_LOG_LVL = os.environ.get('_TXRC_LOG_LVL')
 _LOG_LVL = SILENT if not _LOG_LVL else logging.getLevelName(_LOG_LVL)
-_LOG_FMT = os.environ.get('_TXRETRY_LOG_FMT')
+_LOG_FMT = os.environ.get('_TXRC_LOG_FMT')
 
 #---- Initialization -----------------------------------------------------
 

@@ -26,8 +26,8 @@ build
 dist
 docs/_build
 docs/modules.rst
-docs/txretry.rst
-docs/txretry.*.rst
+docs/txrc.rst
+docs/txrc.*.rst
 htmlcov
 
 # Compiled objects

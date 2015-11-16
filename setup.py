@@ -51,7 +51,7 @@ _MY_DIR = path.dirname(inspect.getframeinfo(inspect.currentframe()).filename)
 #---- Initialization -----------------------------------------------------
 
 _namespace = {
-    '_version_path': path.join(_MY_DIR, 'txretry', 'version.py'),
+    '_version_path': path.join(_MY_DIR, 'txrc', 'version.py'),
 }
 
 if path.isfile(_namespace['_version_path']):
@@ -65,11 +65,11 @@ __version__ = _namespace.get('__version__')
 __release__ = _namespace.get('__release__', __version__)
 
 _SETUP_ARGS = {
-    'name'                : 'txretry',
+    'name'                : 'txrc',
     'version'             : __version__,
     'author'              : 'Matt Bogosian',
     'author_email'        : 'mtb19@columbia.edu',
-    'url'                 : 'https://txretry.readthedocs.org/en/{}/'.format(__release__),
+    'url'                 : 'https://txrc.readthedocs.org/en/{}/'.format(__release__),
     'license'             : 'MIT License',
     'description'         : 'Twisted Retrying Caller Inspired by Terry Jones',
     'long_description'    : README,
