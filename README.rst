@@ -65,7 +65,8 @@ Jeff Knupp (|@jeffknupp|_) `describes how <https://www.jeffknupp.com/blog/2013/0
 
 ..
 
-``txretry`` is a :doc:`pure Python module <py>` for retrying calls in `Twisted <https://twistedmatrix.com/>`_ based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/>`__.
+``txretry`` enables retrying calls in `Twisted <https://twistedmatrix.com/>`_.
+It is based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/>`__.
 It is licensed under the `MIT License <https://opensource.org/licenses/MIT>`_.
 Source code is `available on GitHub <https://github.com/posita/txretry>`__.
 See `the docs <https://txretry.readthedocs.org/en/master/>`__ for more information.

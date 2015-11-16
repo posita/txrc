@@ -412,7 +412,11 @@ def deferredtimeout(reactor, timeout, target_d, timeout_exc=None):
         else:
             exc = timeout_exc
 
-        timeout_d.errback(exc)
+        try:
+            raise exc
+        except Exception as exc: # pylint: disable=broad-except
+            timeout_d.errback(exc)
+
         target_d.cancel()
 
     deadline = reactor.callLater(timeout, _timeout)

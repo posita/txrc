@@ -58,7 +58,7 @@ def formattraceback(failure, *args, **kw):
     :param kw: passed to
         :meth:`twisted.python.failure.Failure.printTraceback`
     """
-    # See <https://twistedmatrix.com/trac/ticket/8044>
+    # See <https://tm.tl/#8044>
     buf = io.StringIO() if _IS_PY3 else io.BytesIO()
     failure.printTraceback(buf, *args, **kw)
     tb_str = buf.getvalue() if _IS_PY3 else buf.getvalue().decode('ascii')

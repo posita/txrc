@@ -43,7 +43,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'repoze.sphinx.autointerface',
+    # 'repoze.sphinx.autointerface', # TODO: see <https://github.com/rtfd/readthedocs.org/issues/1821>
 ]
 
 # Add any paths that contain templates here, relative to this directory.

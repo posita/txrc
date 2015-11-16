@@ -105,7 +105,7 @@ class CallTimeoutTestCase(t_unittest.TestCase):
         call_val = 'done'
         d = calltimeoutexc(self._clock, delay, self._state.deferredcall, ValueError, call_val)
         self._clock.advance(0)
-        self.assertIs(d.result.value, ValueError)
+        self.assertIsInstance(d.result.value, ValueError)
         self.assertFalse(self._state.fired)
         self.assertFalse(self._clock.getDelayedCalls())
         d.addErrback(lambda _res: None) # silence the unhandled error

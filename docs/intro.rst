@@ -29,7 +29,8 @@ If such a file did not accompany this software, then please contact the author b
 Introduction
 ============
 
-``txretry`` is a :doc:`pure Python module <py>` for retrying calls in `Twisted`_ based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/>`__.
+``txretry`` is a :doc:`pure Python module <modules>` for retrying calls in `Twisted`_.
+It is based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/>`__.
 
 .. _`Twisted`: https://twistedmatrix.com/
 
