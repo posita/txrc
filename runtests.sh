@@ -16,4 +16,4 @@ set -ex
 [ -d "${_MY_DIR}" ]
 [ "${_MY_DIR}/runtests.sh" -ef "${0}" ]
 cd "${_MY_DIR}"
-tox ${TOX_ENV:+-e} ${TOX_ENV}
+exec tox ${TOX_ENV:+-e} ${TOX_ENV}

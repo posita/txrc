@@ -28,8 +28,11 @@ from future.builtins.disabled import * # pylint: disable=redefined-builtin,unuse
 
 import logging
 import sys
-from twisted.internet import defer as t_defer
-from twisted.internet import task as t_task
+from twisted.internet import (
+    defer as t_defer,
+    task as t_task,
+)
+from twisted.python import failure as t_failure
 from twisted.trial import unittest as t_unittest
 
 from txrc.retry import (
@@ -39,6 +42,7 @@ from txrc.retry import (
     calltimeoutexc,
 )
 import tests # pylint: disable=unused-import
+from tests.symmetries import mock
 
 #---- Constants ----------------------------------------------------------
 
@@ -198,77 +202,97 @@ class RetryingCallerTestCase(t_unittest.TestCase):
         d = retrying_caller.retry(_call)
         self._clock.advance(0)
         self. assertFailure(d, RuntimeError)
-        self.assertEqual(d.result.args[0], err_msg)
+        self.assertEqual(d.result.args, ( err_msg, ))
         d.addErrback(lambda _res: None) # silence the unhandled error
 
     def test_retry(self):
         retries = 5
-        retrying_caller = RetryingCaller(retries, reactor=self._clock)
+        retrier = RetryingCaller(retries, reactor=self._clock)
 
-        def _mkflaky(_fail_this_many_times):
-            def __calltoretry():
-                _wrappedcalltoretry.times_called += 1
+        ret_vals_0 = tuple(( ValueError('call_0 attempt {}'.format(i)) for i in range(retries - 1) )) + ( 'success_0', )
+        call_0 = mock.Mock(side_effect=ret_vals_0)
+        d_0 = retrier.retry(call_0)
 
-                if _wrappedcalltoretry.failures_left > 0:
-                    _wrappedcalltoretry.failures_left -= 1
-                    raise ValueError(_wrappedcalltoretry)
+        ret_vals_1 = tuple(( ValueError('call_1 attempt {}'.format(i)) for i in range(retries) )) + ( 'success_1', )
+        call_1 = mock.Mock(side_effect=ret_vals_1)
+        d_1 = retrier.retry(call_1)
 
-                return _wrappedcalltoretry
+        ret_vals_2 = tuple(( ValueError('call_2 attempt {}'.format(i)) for i in range(retries + 1) )) + ( 'success_2', )
+        call_2 = mock.Mock(side_effect=ret_vals_2)
+        d_2 = retrier.retry(call_2)
 
-            _wrappedcalltoretry = retrying_caller(__calltoretry)
-            _wrappedcalltoretry.times_called = 0
-            _wrappedcalltoretry.failures_left = _fail_this_many_times
-
-            return _wrappedcalltoretry
-
-        def _checkdlresult(res):
-            self.assertEqual(len(res), 3)
-            self.assertTrue(res[0][0])
-            self.assertEqual(res[0][1].times_called, retries)
-            self.assertEqual(res[0][1].failures_left, 0)
-            self.assertTrue(res[1][0])
-            self.assertEqual(res[1][1].times_called, retries + 1)
-            self.assertEqual(res[1][1].failures_left, 0)
-            self.assertFalse(res[2][0])
-            self.assertIsInstance(res[2][1].value, ValueError)
-            self.assertEqual(res[2][1].value.args[0].times_called, retries + 1)
-            self.assertEqual(res[2][1].value.args[0].failures_left, 0)
-
-        def _handleresult(_call):
-            def __attachresult(__passthru):
-                _call.result = __passthru
-
-                return __passthru
-
-            return __attachresult
-
-        call1 = _mkflaky(retries - 1) # should succeed in time
-        d1 = call1()
-        d1.addBoth(_handleresult(call1))
-
-        call2 = _mkflaky(retries) # should succeed in time
-        d2 = call2()
-        d2.addBoth(_handleresult(call2))
-
-        call3 = _mkflaky(retries + 1) # should not succeed in time
-        d3 = call3()
-        d3.addBoth(_handleresult(call3))
-
-        dl = t_defer.DeferredList(( d1, d2, d3 ), consumeErrors=True)
-        dl.addCallback(_checkdlresult)
-
-        call4 = _mkflaky(retries) # will be canceled before completion
-        d4 = call4()
-        d4.addBoth(_handleresult(call4))
-        d4.addErrback(lambda _res: None) # silence the unhandled error
+        dl = t_defer.DeferredList(( d_0, d_1, d_2 ), consumeErrors=True)
         self._clock.advance(0)
-        d4.cancel()
+        self._clock.pump(RetryingCaller.DoublingBackoffGeneratorFactoryMixin._basegenerator(retries + 1)) # pylint: disable=protected-access
 
-        delays = list(RetryingCaller.DefaultBehavior._basegenerator(retries)) # pylint: disable=protected-access
-        self._clock.pump(delays)
-        self.assertIsInstance(call4.result.value, t_defer.CancelledError)
-        self.assertEqual(call4.times_called, 1)
-        self.assertEqual(call4.failures_left, retries - 1)
+        self.assertTrue(d_0.called)
+        self.assertTrue(d_1.called)
+        self.assertTrue(d_2.called)
+        self.assertTrue(dl.called)
+
+        success_0, ret_val_0 = dl.result[0]
+        self.assertTrue(success_0)
+        self.assertEqual(ret_val_0, 'success_0')
+
+        expected_0 = [ (), ] * len(ret_vals_0)
+        self.assertEqual(call_0.call_args_list, expected_0)
+
+        success_1, ret_val_1 = dl.result[1]
+        self.assertTrue(success_1)
+        self.assertEqual(ret_val_1, 'success_1')
+
+        expected_1 = [ (), ] * len(ret_vals_1)
+        self.assertEqual(call_1.call_args_list, expected_1)
+
+        success_2, ret_val_2 = dl.result[2]
+        self.assertFalse(success_2)
+        self.assertIsInstance(ret_val_2, t_failure.Failure)
+        self.assertIsNotNone(ret_val_2.check(ValueError))
+        error_2 = ret_val_2.value
+        self.assertEqual(error_2.args, ( 'call_2 attempt {}'.format(retries), ))
+
+        expected_2 = [ (), ] * (len(ret_vals_2) - 1)
+        self.assertEqual(call_2.call_args_list, expected_2)
+
+    def test_retry_cancel(self):
+        retries = 5
+        retrier = RetryingCaller(retries, reactor=self._clock)
+
+        ret_vals = tuple(( ValueError('call attempt {}'.format(i)) for i in range(retries) )) + ( 'success', )
+        call = mock.Mock(side_effect=ret_vals)
+        d = retrier.retry(call)
+        self._clock.advance(0)
+        d.cancel()
+        self._clock.pump(RetryingCaller.DoublingBackoffGeneratorFactoryMixin._basegenerator(retries + 1)) # pylint: disable=protected-access
+
+        expected = [ (), ]
+        self.assertEqual(call.call_args_list, expected)
+        self.assertFailure(d, t_defer.CancelledError)
+        d.addErrback(lambda _res: None) # silence the unhandled error
+
+    def test_retry_on(self):
+        errors = ( TimeoutError, TimeoutError, t_defer.CancelledError )
+
+        retries = len(errors) + 1
+        failure_inspector = RetryingCaller.RetryOnFailureInspectorMixin()
+        failure_inspector.retry_on = ( TimeoutError, )
+        retrier = RetryingCaller(retries, failure_inspector_factory=failure_inspector, reactor=self._clock)
+
+        error_raiser = mock.Mock(side_effect=errors)
+        d = retrier.retry(error_raiser, -273)
+        self._clock.advance(0)
+        self._clock.pump(RetryingCaller.DoublingBackoffGeneratorFactoryMixin._basegenerator(retries)) # pylint: disable=protected-access
+
+        expected = [
+            ( ( -273, ), ),
+            ( ( -273, ), ),
+            ( ( -273, ), ),
+        ]
+
+        self.assertTrue(d.called)
+        self.assertEqual(error_raiser.call_args_list, expected)
+        self.assertFailure(d, t_defer.CancelledError)
+        d.addErrback(lambda _res: None) # silence the unhandled error
 
 #---- Initialization -----------------------------------------------------
 

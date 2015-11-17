@@ -88,13 +88,11 @@ _SETUP_ARGS = {
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
-        'Topic :: System :: Networking',
     ),
 
     'packages'            : setuptools.find_packages(exclude = ( 'tests', )),
     'include_package_data': True,
     'install_requires'    : INSTALL_REQUIRES,
-    'test_suite'          : 'tests',
 }
 
 if __name__ == '__main__':

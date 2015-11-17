@@ -165,7 +165,7 @@ class RetryingCaller(object):
     #---- Public inner classes -------------------------------------------
 
     @interface.implementer(IBackoffGeneratorFactory)
-    class DefaultBackoffGeneratoryFactoryMixin(object):
+    class DoublingBackoffGeneratorFactoryMixin(object):
         """
         Implements the default :class:`IBackoffGeneratorFactory` provider
         for a :class:`RetryingCaller` as a mix-in.
@@ -201,7 +201,7 @@ class RetryingCaller(object):
             return ( min((1 << e) / 4, 32.0) for e in range(retries) )
 
     @interface.implementer(IFailureInspector)
-    class DefaultFailureInspectorMixin(object):
+    class HaltOnFailureInspectorMixin(object):
         """
         Implements the default :class:`IFailureInspector` provider for a
         :class:`RetryingCaller` as a mix-in.
@@ -211,6 +211,8 @@ class RetryingCaller(object):
 
         log_lvl = SILENT
 
+        halt_on = ( t_defer.CancelledError, )
+
         #---- Constructor ------------------------------------------------
 
         def __init__(self, *_, **__): # pylint: disable=unused-argument
@@ -219,7 +221,10 @@ class RetryingCaller(object):
         #---- Public hooks -----------------------------------------------
 
         @classmethod
-        def shouldretry(cls, failure):
+        def buildfailureinspector(cls):
+            return cls()
+
+        def shouldretry(self, failure):
             """
             A :attr:`IFailureInspector.shouldretry` provider that passes
             through the underlying failure, which is usually ``failure``,
@@ -228,38 +233,74 @@ class RetryingCaller(object):
             :attr:`twisted.internet.defer.Failure.value` will be passed
             through. This method signals that the call should be retried
             unless the underlying
-            :attr:`twisted.internet.defer.Failure.value` is a
-            :exc:`twisted.internet.defer.CancelledError`.
+            :attr:`twisted.internet.defer.Failure.value` can be found in
+            ``self.halt_on``.
             """
             if isinstance(failure.value, t_defer.FirstError):
                 failure = failure.value.subFailure
 
-            raise_right_now = isinstance(failure.value, ( t_defer.CancelledError, ))
+            halt_now = failure.check(*self.halt_on) is not None
 
-            _LOGGER.log(cls.log_lvl, 'call failed')
-            _LOGGER.log(cls.log_lvl, formattraceback(failure))
+            _LOGGER.log(self.log_lvl, 'call failed')
+            _LOGGER.log(self.log_lvl, formattraceback(failure))
 
-            return failure, raise_right_now
+            return failure, halt_now
 
-    @interface.implementer(IFailureInspectorFactory)
-    class DefaultBehavior(DefaultBackoffGeneratoryFactoryMixin, DefaultFailureInspectorMixin):
+    @interface.implementer(IFailureInspector)
+    class RetryOnFailureInspectorMixin(object):
         """
-        Implements the default behaviors for a :class:`RetryingCaller`.
+        Implements the default :class:`IFailureInspector` provider for a
+        :class:`RetryingCaller` as a mix-in.
         """
+
+        #---- Public constants -------------------------------------------
+
+        log_lvl = SILENT
+
+        retry_on = ( TimeoutError, )
+
+        #---- Constructor ------------------------------------------------
+
+        def __init__(self, *_, **__): # pylint: disable=unused-argument
+            super().__init__()
 
         #---- Public hooks -----------------------------------------------
 
-        def buildfailureinspector(self):
-            return self
+        @classmethod
+        def buildfailureinspector(cls):
+            return cls()
+
+        def shouldretry(self, failure):
+            """
+            A :attr:`IFailureInspector.shouldretry` provider that passes
+            through the underlying failure, which is usually ``failure``,
+            unless it is a :class:`twisted.internet.defer.FirstError`,
+            in which case the ``subFailure`` attribute of
+            :attr:`twisted.internet.defer.Failure.value` will be passed
+            through. This method signals that the call should be retried
+            if the underlying
+            :attr:`twisted.internet.defer.Failure.value` can be found in
+            ``self.retry_on``.
+            """
+            if isinstance(failure.value, t_defer.FirstError):
+                failure = failure.value.subFailure
+
+            halt_now = failure.check(*self.retry_on) is None
+
+            _LOGGER.log(self.log_lvl, 'call failed')
+            _LOGGER.log(self.log_lvl, formattraceback(failure))
+
+            return failure, halt_now
 
     #---- Private constants ----------------------------------------------
 
-    _DEFAULT_BEHAVIOR = DefaultBehavior()
+    _DEFAULT_BACKOFF_GENERATOR_FACTORY = DoublingBackoffGeneratorFactoryMixin
+    _DEFAULT_FAILURE_INSPECTOR_FACTORY = HaltOnFailureInspectorMixin
 
     #---- Constructor ----------------------------------------------------
 
     #=====================================================================
-    def __init__(self, retries, backoff_generator_factory=_DEFAULT_BEHAVIOR, failure_inspector_factory=_DEFAULT_BEHAVIOR, reactor=None):
+    def __init__(self, retries, backoff_generator_factory=_DEFAULT_BACKOFF_GENERATOR_FACTORY, failure_inspector_factory=_DEFAULT_FAILURE_INSPECTOR_FACTORY, reactor=None):
         self._retries = retries
         self._backoff_generator_factory = backoff_generator_factory
         self._failure_inspector_factory = failure_inspector_factory
@@ -313,15 +354,15 @@ class RetryingCaller(object):
 
         def _retry(_failure=None):
             if _failure is not None:
-                tested_failure, raise_right_now = failure_inspector.shouldretry(_failure)
+                tested_failure, halt_now = failure_inspector.shouldretry(_failure)
 
-                if not raise_right_now:
+                if not halt_now:
                     try:
                         delay = next(backoff_gen)
                     except StopIteration:
-                        raise_right_now = True
+                        halt_now = True
 
-                if raise_right_now:
+                if halt_now:
                     return tested_failure
             else:
                 delay = 0

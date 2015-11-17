@@ -25,40 +25,7 @@ from future.builtins.disabled import * # pylint: disable=redefined-builtin,unuse
 
 #---- Imports ------------------------------------------------------------
 
-import logging
-import os
-import sys
-import unittest
-# import twisted
-from twisted.internet import (
-    base as t_base,
-    defer as t_defer,
-)
-
-from txrc.logging import SILENT
-
-#---- Constants ----------------------------------------------------------
-
-__all__ = ()
-
-_LOG_LVL = os.environ.get('_TXRC_LOG_LVL')
-_LOG_LVL = SILENT if not _LOG_LVL or _LOG_LVL == 'SILENT' else logging.getLevelName(_LOG_LVL)
-_LOG_FMT = os.environ.get('_TXRC_LOG_FMT')
-
-#---- Initialization -----------------------------------------------------
-
-# Python 3.4 complains that assertRaisesRegexp is deprecated in favor of
-# assertRaisesRegex, which Python 2.7's unittest doesn't have; this
-# monkey patch fixes all that
-if not hasattr(unittest.TestCase, 'assertRaisesRegex'):
-    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
-
-# TODO: swap checks once <https://tm.tl/#8110> is fixed
-if sys.version_info[0] <= 2:
-# if sys.version_info[0] <= 2 \
-#         or ( twisted.version.major, twisted.version.minor ) >= ( 15, 5 ):
-    t_base.DelayedCall.debug = True
-
-t_defer.setDebugging(True)
-logging.basicConfig(format=_LOG_FMT)
-logging.getLogger().setLevel(_LOG_LVL)
+try:
+    from unittest import mock # pylint: disable=no-name-in-module,unused-import,useless-suppression
+except ImportError:
+    import mock # pylint: disable=import-error,unused-import,useless-suppression
