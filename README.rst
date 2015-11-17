@@ -39,29 +39,29 @@ Jeff Knupp (|@jeffknupp|_) `describes how <https://www.jeffknupp.com/blog/2013/0
 ``txrc`` - Twisted Retrying Caller Inspired by Terry Jones
 ==========================================================
 
-.. image:: https://pypip.in/version/txrc/badge.svg
-    :target: https://pypi.python.org/pypi/txrc/
-    :alt: [Latest Version]
+.. image:: https://img.shields.io/pypi/v/txrc.svg
+    :target: https://pypi.python.org/pypi/txrc
+    :alt: [master Version]
 
 .. image:: https://readthedocs.org/projects/txrc/badge/?version=master
     :target: https://txrc.readthedocs.org/en/master/
-    :alt: [Documentation]
+    :alt: [master Documentation]
 
-.. image:: https://pypip.in/license/txrc/badge.svg
-    :target: https://opensource.org/licenses/MIT
-    :alt: [License]
+.. image:: https://img.shields.io/pypi/l/txrc.svg
+    :target: http://opensource.org/licenses/MIT
+    :alt: [master License]
 
-.. image:: https://pypip.in/py_versions/txrc/badge.svg
-    :target: https://pypi.python.org/pypi/txrc/master
-    :alt: [Supported Python Versions]
+.. image:: https://img.shields.io/pypi/pyversions/txrc.svg
+    :target: https://pypi.python.org/pypi/txrc
+    :alt: [master Supported Python Versions]
 
-.. image:: https://pypip.in/implementation/txrc/badge.svg
-    :target: https://pypi.python.org/pypi/txrc/master
-    :alt: [Supported Python Implementations]
+.. image:: https://img.shields.io/pypi/implementation/txrc.svg
+    :target: https://pypi.python.org/pypi/txrc
+    :alt: [master Supported Python Implementations]
 
-.. image:: https://pypip.in/status/txrc/badge.svg
-    :target: https://pypi.python.org/pypi/txrc/master
-    :alt: [Development Stage]
+.. image:: https://img.shields.io/pypi/status/txrc.svg
+    :target: https://pypi.python.org/pypi/txrc
+    :alt: [master Development Stage]
 
 ..
 
