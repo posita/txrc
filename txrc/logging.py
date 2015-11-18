@@ -35,7 +35,7 @@ from twisted.internet import defer as t_defer
 
 __all__ = ()
 
-SILENT = -(sys.maxsize) - 1
+SILENT = -sys.maxsize - 1
 
 _IS_PY3 = sys.version_info >= ( 3, 0 )
 _LOGGER = _logging.getLogger(__name__)
@@ -107,7 +107,7 @@ def logerrback(failure, log_lvl=_logging.DEBUG, logger=_LOGGER_TOP_LEVEL, msg='U
         return failure
 
 #=========================================================================
-def logerrbackdl(dl_res, log_lvl=_logging.DEBUG, logger=_LOGGER, msg=None, handled=(), suppress_msg_on_handled=False):
+def logerrbackdl(dl_res, log_lvl=_logging.DEBUG, logger=_LOGGER_TOP_LEVEL, msg=None, handled=(), suppress_msg_on_handled=False):
     """
     Generic errback function to log individual failures from
     :class:`twisted.internet.defer.DeferredList`s. Each failure is logged
@@ -137,7 +137,7 @@ def logerrbackdl(dl_res, log_lvl=_logging.DEBUG, logger=_LOGGER, msg=None, handl
     return dl_res
 
 #=========================================================================
-def logunhandlederr(log_lvl, logger=_LOGGER):
+def logunhandlederr(log_lvl, logger=_LOGGER_TOP_LEVEL):
     """
     Decorates a maybe-deferred callable (the decorated callable always
     returns a deferred) to log unhandled errors. Example usage:
@@ -146,8 +146,8 @@ def logunhandlederr(log_lvl, logger=_LOGGER):
             :linenos:
 
             @logunhandlederr(logging.DEBUG)
-            def raiseorreturn(raise=True):
-                if raise:
+            def raiseorreturn(err=True):
+                if err:
                     raise Exception
 
                 return 'Success!'
@@ -165,7 +165,7 @@ def logunhandlederr(log_lvl, logger=_LOGGER):
     def wrap(_call):
         def _logunhandlederr(*__args, **__kw):
             target_d = t_defer.maybeDeferred(_call, *__args, **__kw)
-            target_d.addErrback(logerrback, log_lvl, logger, handled=( Exception, ))
+            target_d.addErrback(logerrback, log_lvl, logger, handled=( Exception, ), suppress_msg_on_handled=False)
 
             return target_d
 

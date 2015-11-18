@@ -177,20 +177,19 @@ class RetryingCaller(object):
 
         #---- Constructor ------------------------------------------------
 
-        def __init__(self, *_, **__): # pylint: disable=unused-argument
-            super().__init__()
+        def __init__(self, *args, **kw):
+            super().__init__(*args, **kw)
 
         #---- Public hooks -----------------------------------------------
 
-        @classmethod
-        def buildbackoffgenerator(cls, retries):
+        def buildbackoffgenerator(self, retries):
             """
             A :attr:`IBackoffGeneratorFactory:buildbackoffgenerator`
             provider that yields delays that start with 0.25 and double
             for each subsequent attempt up to ``retries`` times.
             """
-            for delay in cls._basegenerator(retries):
-                _LOGGER.log(cls.log_lvl, 'retrying in %0.3f seconds', delay)
+            for delay in self._basegenerator(retries):
+                _LOGGER.log(self.log_lvl, 'retrying in %0.3f seconds', delay)
 
                 yield delay
 
@@ -200,7 +199,7 @@ class RetryingCaller(object):
         def _basegenerator(retries):
             return ( min((1 << e) / 4, 32.0) for e in range(retries) )
 
-    @interface.implementer(IFailureInspector)
+    @interface.implementer(IFailureInspectorFactory, IFailureInspector)
     class HaltOnFailureInspectorMixin(object):
         """
         Implements the default :class:`IFailureInspector` provider for a
@@ -210,19 +209,17 @@ class RetryingCaller(object):
         #---- Public constants -------------------------------------------
 
         log_lvl = SILENT
-
         halt_on = ( t_defer.CancelledError, )
 
         #---- Constructor ------------------------------------------------
 
-        def __init__(self, *_, **__): # pylint: disable=unused-argument
-            super().__init__()
+        def __init__(self, *args, **kw):
+            super().__init__(*args, **kw)
 
         #---- Public hooks -----------------------------------------------
 
-        @classmethod
-        def buildfailureinspector(cls):
-            return cls()
+        def buildfailureinspector(self):
+            return self
 
         def shouldretry(self, failure):
             """
@@ -246,7 +243,7 @@ class RetryingCaller(object):
 
             return failure, halt_now
 
-    @interface.implementer(IFailureInspector)
+    @interface.implementer(IFailureInspectorFactory, IFailureInspector)
     class RetryOnFailureInspectorMixin(object):
         """
         Implements the default :class:`IFailureInspector` provider for a
@@ -256,19 +253,17 @@ class RetryingCaller(object):
         #---- Public constants -------------------------------------------
 
         log_lvl = SILENT
-
         retry_on = ( TimeoutError, )
 
         #---- Constructor ------------------------------------------------
 
-        def __init__(self, *_, **__): # pylint: disable=unused-argument
-            super().__init__()
+        def __init__(self, *args, **kw):
+            super().__init__(*args, **kw)
 
         #---- Public hooks -----------------------------------------------
 
-        @classmethod
-        def buildfailureinspector(cls):
-            return cls()
+        def buildfailureinspector(self):
+            return self
 
         def shouldretry(self, failure):
             """
@@ -294,8 +289,8 @@ class RetryingCaller(object):
 
     #---- Private constants ----------------------------------------------
 
-    _DEFAULT_BACKOFF_GENERATOR_FACTORY = DoublingBackoffGeneratorFactoryMixin
-    _DEFAULT_FAILURE_INSPECTOR_FACTORY = HaltOnFailureInspectorMixin
+    _DEFAULT_BACKOFF_GENERATOR_FACTORY = DoublingBackoffGeneratorFactoryMixin()
+    _DEFAULT_FAILURE_INSPECTOR_FACTORY = HaltOnFailureInspectorMixin()
 
     #---- Constructor ----------------------------------------------------
 
