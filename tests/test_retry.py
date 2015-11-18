@@ -297,7 +297,5 @@ class RetryingCallerTestCase(t_unittest.TestCase):
 #---- Initialization -----------------------------------------------------
 
 if __name__ == '__main__':
-    logging.basicConfig()
-    logging.getLogger().setLevel(logging.DEBUG)
     from unittest import main
     main()

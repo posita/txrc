@@ -66,7 +66,7 @@ def formattraceback(failure, *args, **kw):
     return tb_str.strip()
 
 #=========================================================================
-def logerrback(failure, logger=_LOGGER_TOP_LEVEL, log_lvl=_logging.DEBUG, msg='Unhandled error:', handled=(), suppress_msg_on_handled=True, reraise_handled=False):
+def logerrback(failure, log_lvl=_logging.DEBUG, logger=_LOGGER_TOP_LEVEL, msg='Unhandled error:', handled=(), suppress_msg_on_handled=True, reraise_handled=False):
     """
     Generic errback function to log failures.
 
@@ -107,7 +107,7 @@ def logerrback(failure, logger=_LOGGER_TOP_LEVEL, log_lvl=_logging.DEBUG, msg='U
         return failure
 
 #=========================================================================
-def logerrbackdl(dl_res, logger=_LOGGER, log_lvl=_logging.DEBUG, msg=None, handled=(), suppress_msg_on_handled=False):
+def logerrbackdl(dl_res, log_lvl=_logging.DEBUG, logger=_LOGGER, msg=None, handled=(), suppress_msg_on_handled=False):
     """
     Generic errback function to log individual failures from
     :class:`twisted.internet.defer.DeferredList`s. Each failure is logged
@@ -132,7 +132,7 @@ def logerrbackdl(dl_res, logger=_LOGGER, log_lvl=_logging.DEBUG, msg=None, handl
     if dl_res is not None:
         for success, res in dl_res:
             if not success:
-                logerrback(res, logger, log_lvl, msg, handled, suppress_msg_on_handled, reraise_handled=False)
+                logerrback(res, log_lvl, logger, msg, handled, suppress_msg_on_handled, reraise_handled=False)
 
     return dl_res
 
@@ -165,7 +165,7 @@ def logunhandlederr(log_lvl, logger=_LOGGER):
     def wrap(_call):
         def _logunhandlederr(*__args, **__kw):
             target_d = t_defer.maybeDeferred(_call, *__args, **__kw)
-            target_d.addErrback(logerrback, logger, log_lvl, handled=( Exception, ))
+            target_d.addErrback(logerrback, log_lvl, logger, handled=( Exception, ))
 
             return target_d
 
