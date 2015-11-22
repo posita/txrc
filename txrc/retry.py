@@ -281,9 +281,10 @@ class RetryingCaller(object):
     #---- Constructor ----------------------------------------------------
 
     #=====================================================================
-    def __init__(self, retries, log_lvl=SILENT, backoff_generator_factory=_DEFAULT_BACKOFF_GENERATOR_FACTORY, failure_inspector_factory=_DEFAULT_FAILURE_INSPECTOR_FACTORY, reactor=None):
+    def __init__(self, retries, backoff_generator_factory=_DEFAULT_BACKOFF_GENERATOR_FACTORY, failure_inspector_factory=_DEFAULT_FAILURE_INSPECTOR_FACTORY, log_lvl=SILENT, logger=_LOGGER, reactor=None):
         self._retries = retries
         self._log_lvl = log_lvl
+        self._logger = logger
         self._backoff_generator_factory = backoff_generator_factory
         self._failure_inspector_factory = failure_inspector_factory
 
@@ -340,10 +341,10 @@ class RetryingCaller(object):
 
                 if not halt_now:
                     try:
-                        _LOGGER.log(self._log_lvl, 'call failed')
-                        _LOGGER.log(self._log_lvl, formattraceback(_failure))
+                        self._logger.log(self._log_lvl, 'call failed')
+                        self._logger.log(self._log_lvl, formattraceback(_failure))
                         delay = next(backoff_gen)
-                        _LOGGER.log(self._log_lvl, 'retrying in %0.3f seconds', delay)
+                        self._logger.log(self._log_lvl, 'retrying in %0.3f seconds', delay)
                     except StopIteration:
                         halt_now = True
 

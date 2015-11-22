@@ -132,7 +132,11 @@ def logerrbackdl(dl_res, log_lvl=_logging.DEBUG, logger=_LOGGER_TOP_LEVEL, msg=N
     if dl_res is not None:
         for success, res in dl_res:
             if not success:
-                logerrback(res, log_lvl, logger, msg, handled, suppress_msg_on_handled, reraise_handled=False)
+                if msg is not None:
+                    logger.log(log_lvl, msg)
+                    msg = None
+
+                logerrback(res, log_lvl, logger, None, handled, suppress_msg_on_handled, reraise_handled=False)
 
     return dl_res
 

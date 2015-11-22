@@ -83,14 +83,13 @@ class LoggingTestCase(t_unittest.TestCase):
         d2 = t_defer.maybeDeferred(self._raiseorreturn, ValueError('d2 failed!'))
         dl = t_defer.DeferredList(( d0, d1, d2 ))
 
-        msg = 'Unhandled error in dl:'
+        msg = 'Unhandled error(s) in dl:'
         dl.addCallback(logerrbackdl, log_lvl=logging.INFO, logger=logger, msg=msg, handled=( Exception, ), suppress_msg_on_handled=False)
         self.assertTrue(dl.called)
-        self.assertEqual(len(logger.mock_calls), 4)
+        self.assertEqual(len(logger.mock_calls), 3)
         self.assertEqual(logger.mock_calls[0], mock.call.log(logging.INFO, msg))
         self.assertRegex(logger.mock_calls[1][1][1].replace(os.linesep, ' '), r'^Traceback \(most recent call last\):\s.*ValueError: d1 failed!$')
-        self.assertEqual(logger.mock_calls[2], mock.call.log(logging.INFO, msg))
-        self.assertRegex(logger.mock_calls[3][1][1].replace(os.linesep, ' '), r'^Traceback \(most recent call last\):\s.*ValueError: d2 failed!$')
+        self.assertRegex(logger.mock_calls[2][1][1].replace(os.linesep, ' '), r'^Traceback \(most recent call last\):\s.*ValueError: d2 failed!$')
 
         d1.addErrback(lambda _res: None) # silence the unhandled error
         d2.addErrback(lambda _res: None) # silence the unhandled error
