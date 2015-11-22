@@ -171,10 +171,6 @@ class RetryingCaller(object):
         for a :class:`RetryingCaller` as a mix-in.
         """
 
-        #---- Public constants -------------------------------------------
-
-        log_lvl = SILENT
-
         #---- Constructor ------------------------------------------------
 
         def __init__(self, *args, **kw):
@@ -189,8 +185,6 @@ class RetryingCaller(object):
             for each subsequent attempt up to ``retries`` times.
             """
             for delay in self._basegenerator(retries):
-                _LOGGER.log(self.log_lvl, 'retrying in %0.3f seconds', delay)
-
                 yield delay
 
         #---- Private static methods -------------------------------------
@@ -208,7 +202,6 @@ class RetryingCaller(object):
 
         #---- Public constants -------------------------------------------
 
-        log_lvl = SILENT
         halt_on = ( t_defer.CancelledError, )
 
         #---- Constructor ------------------------------------------------
@@ -238,9 +231,6 @@ class RetryingCaller(object):
 
             halt_now = failure.check(*self.halt_on) is not None
 
-            _LOGGER.log(self.log_lvl, 'call failed')
-            _LOGGER.log(self.log_lvl, formattraceback(failure))
-
             return failure, halt_now
 
     @interface.implementer(IFailureInspectorFactory, IFailureInspector)
@@ -252,7 +242,6 @@ class RetryingCaller(object):
 
         #---- Public constants -------------------------------------------
 
-        log_lvl = SILENT
         retry_on = ( TimeoutError, )
 
         #---- Constructor ------------------------------------------------
@@ -282,9 +271,6 @@ class RetryingCaller(object):
 
             halt_now = failure.check(*self.retry_on) is None
 
-            _LOGGER.log(self.log_lvl, 'call failed')
-            _LOGGER.log(self.log_lvl, formattraceback(failure))
-
             return failure, halt_now
 
     #---- Private constants ----------------------------------------------
@@ -295,8 +281,9 @@ class RetryingCaller(object):
     #---- Constructor ----------------------------------------------------
 
     #=====================================================================
-    def __init__(self, retries, backoff_generator_factory=_DEFAULT_BACKOFF_GENERATOR_FACTORY, failure_inspector_factory=_DEFAULT_FAILURE_INSPECTOR_FACTORY, reactor=None):
+    def __init__(self, retries, log_lvl=SILENT, backoff_generator_factory=_DEFAULT_BACKOFF_GENERATOR_FACTORY, failure_inspector_factory=_DEFAULT_FAILURE_INSPECTOR_FACTORY, reactor=None):
         self._retries = retries
+        self._log_lvl = log_lvl
         self._backoff_generator_factory = backoff_generator_factory
         self._failure_inspector_factory = failure_inspector_factory
 
@@ -353,7 +340,10 @@ class RetryingCaller(object):
 
                 if not halt_now:
                     try:
+                        _LOGGER.log(self._log_lvl, 'call failed')
+                        _LOGGER.log(self._log_lvl, formattraceback(_failure))
                         delay = next(backoff_gen)
+                        _LOGGER.log(self._log_lvl, 'retrying in %0.3f seconds', delay)
                     except StopIteration:
                         halt_now = True
 
