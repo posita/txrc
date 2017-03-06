@@ -10,21 +10,10 @@
     :maxdepth: 3
     :hidden:
 
-Copyright |(c)| 2015 `Matt Bogosian`_ (|@posita|_).
-
-.. |(c)| unicode:: u+a9
-.. _`Matt Bogosian`: mailto:mtb19@columbia.edu?Subject=txrc
-.. |@posita| replace:: **@posita**
-.. _`@posita`: https://github.com/posita
-
-Please see the accompanying |LICENSE|_ (or |LICENSE.txt|_) file for rights and restrictions governing use of this software.
+Copyright and other protections apply.
+Please see the accompanying :doc:`LICENSE <LICENSE>` and :doc:`CREDITS <CREDITS>` file(s) for rights and restrictions governing use of this software.
 All rights not expressly waived or licensed are reserved.
-If such a file did not accompany this software, then please contact the author before viewing or using this software in any capacity.
-
-.. |LICENSE| replace:: ``LICENSE``
-.. _`LICENSE`: _sources/LICENSE.txt
-.. |LICENSE.txt| replace:: ``LICENSE.txt``
-.. _`LICENSE.txt`: _sources/LICENSE.txt
+If those files are missing or appear to be modified from their originals, then please contact the author before viewing or using this software in any capacity.
 
 Introduction
 ============
@@ -38,6 +27,7 @@ License
 -------
 
 ``txrc`` is licensed under the `MIT License <https://opensource.org/licenses/MIT>`_.
+See the :doc:`LICENSE <LICENSE>` file for details.
 Source code is `available on GitHub <https://github.com/posita/txrc>`__.
 
 Installation
@@ -45,14 +35,14 @@ Installation
 
 Installation can be performed via ``pip`` (which will download and install the `latest release <https://pypi.python.org/pypi/txrc/>`__):
 
-.. code-block:: sh
+.. code-block:: console
 
     % pip install txrc
     ...
 
 Alternately, you can download the sources (e.g., `from GitHub <https://github.com/posita/txrc>`__) and run ``setup.py``:
 
-.. code-block:: sh
+.. code-block:: console
 
     % git clone https://github.com/posita/txrc
     ...
@@ -75,11 +65,10 @@ Python 2.6 will *not* work.
 
 ``txrc`` has the following dependencies (which will be installed automatically):
 
+*   |Twisted|_
 *   |future|_
 
-*   |twisted|_
-
+.. |Twisted| replace:: ``Twisted``
+.. _`Twisted`: https://twistedmatrix.com/
 .. |future| replace:: ``future``
 .. _`future`: http://python-future.org/
-.. |twisted| replace:: ``twisted``
-.. _`twisted`: https://twistedmatrix.com/

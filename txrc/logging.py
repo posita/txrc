@@ -1,29 +1,23 @@
-#-*- encoding: utf-8; grammar-ext: py; mode: python -*-
+# -*- encoding: utf-8; grammar-ext: py; mode: python; test-case-name: test.test_logging -*-
 
-#=========================================================================
+# ========================================================================
 """
-  Copyright |(c)| 2015 `Matt Bogosian`_ (|@posita|_).
-
-  .. |(c)| unicode:: u+a9
-  .. _`Matt Bogosian`: mailto:mtb19@columbia.edu
-  .. |@posita| replace:: **@posita**
-  .. _`@posita`: https://github.com/posita
-
-  Please see the accompanying ``LICENSE`` (or ``LICENSE.txt``) file for
-  rights and restrictions governing use of this software. All rights not
-  expressly waived or licensed are reserved. If such a file did not
-  accompany this software, then please contact the author before viewing
-  or using this software in any capacity.
+Copyright and other protections apply. Please see the accompanying
+:doc:`LICENSE <LICENSE>` and :doc:`CREDITS <CREDITS>` file(s) for rights
+and restrictions governing use of this software. All rights not expressly
+waived or licensed are reserved. If those files are missing or appear to
+be modified from their originals, then please contact the author before
+viewing or using this software in any capacity.
 """
-#=========================================================================
+# ========================================================================
 
 from __future__ import (
     absolute_import, division, print_function, unicode_literals,
 )
-from builtins import * # pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
-from future.builtins.disabled import * # pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
+from builtins import *  # noqa: F401,F403; pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
+from future.builtins.disabled import *  # noqa: F401,F403; pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
 
-#---- Imports ------------------------------------------------------------
+# ---- Imports -----------------------------------------------------------
 
 import functools
 import io
@@ -31,7 +25,7 @@ import logging as _logging
 import sys
 from twisted.internet import defer as t_defer
 
-#---- Constants ----------------------------------------------------------
+# ---- Constants ---------------------------------------------------------
 
 __all__ = ()
 
@@ -41,9 +35,9 @@ _IS_PY3 = sys.version_info >= ( 3, 0 )
 _LOGGER = _logging.getLogger(__name__)
 _LOGGER_TOP_LEVEL = _logging.getLogger()
 
-#---- Functions ----------------------------------------------------------
+# ---- Functions ---------------------------------------------------------
 
-#=========================================================================
+# ========================================================================
 def formattraceback(failure, *args, **kw):
     """
     Returns a traceback string for ``failure``.
@@ -65,7 +59,7 @@ def formattraceback(failure, *args, **kw):
 
     return tb_str.strip()
 
-#=========================================================================
+# ========================================================================
 def logerrback(failure, log_lvl=_logging.DEBUG, logger=_LOGGER_TOP_LEVEL, msg='Unhandled error:', handled=(), suppress_msg_on_handled=True, reraise_handled=False):
     """
     Generic errback function to log failures.
@@ -80,18 +74,19 @@ def logerrback(failure, log_lvl=_logging.DEBUG, logger=_LOGGER_TOP_LEVEL, msg='U
 
     :param Integral log_lvl: level passed to :meth:`logging.Logger.log`
 
-    :param str msg: the message to log or `None` for no message
+    :param str msg: the message to log or :constant:`None` for no message
 
     :param sequence handled: a sequence of :exc:`Exception`s whose stack
         traces will *not* be logged
 
-    :param bool reraise: if `True`, causes ``failure`` to be returned
-        (passed through)
+    :param bool reraise: if :constant:`True`, causes ``failure`` to be
+        returned (passed through)
 
-    :param bool suppress_msg_on_handled: if `True`, suppress logging of
-        ``msg`` ``failure.value`` matches ``handled``
+    :param bool suppress_msg_on_handled: if :constant:`True`, suppress
+        logging of ``msg`` ``failure.value`` matches ``handled``
 
-    :returns: ``failure`` if ``reraise`` is `True`, otherwise `None`
+    :returns: ``failure`` if ``reraise`` is :constant:`True`, otherwise
+        :constant:`None`
     """
     is_handled = failure.check(*handled)
 
@@ -106,7 +101,7 @@ def logerrback(failure, log_lvl=_logging.DEBUG, logger=_LOGGER_TOP_LEVEL, msg='U
             or reraise_handled:
         return failure
 
-#=========================================================================
+# ========================================================================
 def logerrbackdl(dl_res, log_lvl=_logging.DEBUG, logger=_LOGGER_TOP_LEVEL, msg=None, handled=(), suppress_msg_on_handled=False):
     """
     Generic errback function to log individual failures from
@@ -140,23 +135,23 @@ def logerrbackdl(dl_res, log_lvl=_logging.DEBUG, logger=_LOGGER_TOP_LEVEL, msg=N
 
     return dl_res
 
-#=========================================================================
+# ========================================================================
 def logunhandlederr(log_lvl, logger=_LOGGER_TOP_LEVEL):
     """
     Decorates a maybe-deferred callable (the decorated callable always
     returns a deferred) to log unhandled errors. Example usage:
 
-        .. code-block:: python
-            :linenos:
+    .. code-block:: python
+        :linenos:
 
-            @logunhandlederr(logging.DEBUG)
-            def raiseorreturn(err=True):
-                if err:
-                    raise Exception
+        @logunhandlederr(logging.DEBUG)
+        def raiseorreturn(err=True):
+            if err:
+                raise Exception
 
-                return 'Success!'
+            return 'Success!'
 
-            d = raiseorreturn()
+        d = raiseorreturn()
 
     :param Integral log_lvl: level passed to :meth:`logging.Logger.log`
 

@@ -1,57 +1,51 @@
-#-*-mode: python; encoding: utf-8; test-case-name: tests.testutil-*-
+# -*- encoding: utf-8; grammar-ext: py; mode: python; test-case-name: test.test_retry -*-
 
-#=========================================================================
+# ========================================================================
 """
-  Copyright |(c)| 2015 `Matt Bogosian`_ (|@posita|_).
+Copyright and other protections apply. Please see the accompanying
+:doc:`LICENSE <LICENSE>` and :doc:`CREDITS <CREDITS>` file(s) for rights
+and restrictions governing use of this software. All rights not expressly
+waived or licensed are reserved. If those files are missing or appear to
+be modified from their originals, then please contact the author before
+viewing or using this software in any capacity.
 
-  .. |(c)| unicode:: u+a9
-  .. _`Matt Bogosian`: mailto:mtb19@columbia.edu
-  .. |@posita| replace:: **@posita**
-  .. _`@posita`: https://github.com/posita
+Portions of this code are adapted from `this blog post by Terry Jones
+<http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/>`__.
+Per its author's terms, its use herein is permitted under the
+`CC0 1.0 License`_.
 
-  Please see the accompanying ``LICENSE`` (or ``LICENSE.txt``) file for
-  rights and restrictions governing use of this software. All rights not
-  expressly waived or licensed are reserved. If such a file did not
-  accompany this software, then please contact the author before viewing
-  or using this software in any capacity.
+Portions of this code are adapted from `this Gist
+<https://gist.github.com/theduderog/735556>`__. Per its authors' terms,
+its use herein is permitted under the `CC0 1.0 License`_.
 
-  Portions of this code are adapted from `this blog post by Terry Jones
-  <http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/>`__.
-  Per its author's terms, its use herein is permitted under the
-  `CC0 1.0 License`_.
-
-  Portions of this code are adapted from `this Gist
-  <https://gist.github.com/theduderog/735556>`__. Per its authors' terms,
-  its use herein is permitted under the `CC0 1.0 License`_.
-
-  .. _`CC0 1.0 License`: https://creativecommons.org/publicdomain/zero/1.0/
+.. _`CC0 1.0 License`: https://creativecommons.org/publicdomain/zero/1.0/
 """
-#=========================================================================
+# ========================================================================
 
 from __future__ import (
     absolute_import, division, print_function, unicode_literals,
 )
-from builtins import * # pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
-from future.builtins.disabled import * # pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
+from builtins import *  # noqa: F401,F403; pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
+from future.builtins.disabled import *  # noqa: F401,F403; pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
 
-#---- Imports ------------------------------------------------------------
+# ---- Imports -----------------------------------------------------------
 
 import functools
 import logging
 from twisted.internet import defer as t_defer
 from twisted.internet import task as t_task
-from zope import interface # pylint: disable=import-error
+from zope import interface
 
 from .logging import (
     SILENT,
     formattraceback,
 )
 
-#---- Constants ----------------------------------------------------------
+# ---- Constants ---------------------------------------------------------
 
 __all__ = (
+    'DeferredTimeoutError',
     'RetryingCaller',
-    'TimeoutError',
     'calltimeout',
     'calltimeoutexc',
     'deferredtimeout',
@@ -59,27 +53,27 @@ __all__ = (
 
 _LOGGER = logging.getLogger(__name__)
 
-#---- Exceptions ---------------------------------------------------------
+# ---- Exceptions --------------------------------------------------------
 
-#=========================================================================
-class TimeoutError(Exception):
+# ========================================================================
+class DeferredTimeoutError(Exception):
     ""
 
-    #---- Public properties ----------------------------------------------
+    # ---- Public properties ---------------------------------------------
 
     target_d = None
 
-#---- Interfaces ---------------------------------------------------------
+# ---- Interfaces --------------------------------------------------------
 
-#=========================================================================
-class IBackoffGeneratorFactory(interface.Interface):
+# ========================================================================
+class IBackoffGeneratorFactory(interface.Interface):  # pylint: disable=inherit-non-class
     """
     Factory for creating a backoff generator for use with a
     :class:`RetryingCaller`.
     """
     # pylint: disable=no-method-argument,no-self-argument,useless-suppression
 
-    #---- Hooks ----------------------------------------------------------
+    # ---- Hooks ---------------------------------------------------------
 
     def buildbackoffgenerator(retries):
         """
@@ -93,15 +87,15 @@ class IBackoffGeneratorFactory(interface.Interface):
             (measured in seconds)
         """
 
-#=========================================================================
-class IFailureInspector(interface.Interface):
+# ========================================================================
+class IFailureInspector(interface.Interface):  # pylint: disable=inherit-non-class
     """
     Inspects a :class:`twisted.python.failure.Failure` and decides whether
     or not the call the generated it should be retried.
     """
     # pylint: disable=no-method-argument,no-self-argument,useless-suppression
 
-    #---- Hooks ----------------------------------------------------------
+    # ---- Hooks ---------------------------------------------------------
 
     def shouldretry(failure):
         """
@@ -114,18 +108,18 @@ class IFailureInspector(interface.Interface):
         :returns: a tuple in the format ``( Failure, bool )``, where the
             first item is the :class:`~twisted.python.failure.Failure`
             that should be raised if the number of retries has been
-            exhausted, or if the second item is `True`
+            exhausted, or if the second item is :constant:`True`
         """
 
-#=========================================================================
-class IFailureInspectorFactory(interface.Interface):
+# ========================================================================
+class IFailureInspectorFactory(interface.Interface):  # pylint: disable=inherit-non-class
     """
     Factory for creating a :class:`FailureInspector` for use with a
     :class:`RetryingCaller`.
     """
     # pylint: disable=no-method-argument,no-self-argument,useless-suppression
 
-    #---- Hooks ----------------------------------------------------------
+    # ---- Hooks ---------------------------------------------------------
 
     def buildfailureinspector():
         """
@@ -134,9 +128,9 @@ class IFailureInspectorFactory(interface.Interface):
         :returns: a :class:`IFailureInspector` provider
         """
 
-#---- Classes ------------------------------------------------------------
+# ---- Classes -----------------------------------------------------------
 
-#=========================================================================
+# ========================================================================
 class RetryingCaller(object):
     """
     Partial with the ability to retry the call on failure. Adapted from
@@ -156,13 +150,13 @@ class RetryingCaller(object):
 
     :type failure_inspector_factory: :class:`IFactoryInspectorFactory`
 
-    :param reactor: the reactor to use; if `None`, then
+    :param reactor: the reactor to use; if :constant:`None`, then
         `twisted.internet.reactor` is used
 
     :type reactor: :class:`twisted.internet.interfaces.IReactorTime`
     """
 
-    #---- Public inner classes -------------------------------------------
+    # ---- Public inner classes ------------------------------------------
 
     @interface.implementer(IBackoffGeneratorFactory)
     class DoublingBackoffGeneratorFactoryMixin(object):
@@ -171,12 +165,12 @@ class RetryingCaller(object):
         for a :class:`RetryingCaller` as a mix-in.
         """
 
-        #---- Constructor ------------------------------------------------
+        # ---- Constructor -----------------------------------------------
 
         def __init__(self, *args, **kw):
             super().__init__(*args, **kw)
 
-        #---- Public hooks -----------------------------------------------
+        # ---- Public hooks ----------------------------------------------
 
         def buildbackoffgenerator(self, retries):
             """
@@ -187,7 +181,7 @@ class RetryingCaller(object):
             for delay in self._basegenerator(retries):
                 yield delay
 
-        #---- Private static methods -------------------------------------
+        # ---- Private static methods ------------------------------------
 
         @staticmethod
         def _basegenerator(retries):
@@ -200,16 +194,16 @@ class RetryingCaller(object):
         :class:`RetryingCaller` as a mix-in.
         """
 
-        #---- Public constants -------------------------------------------
+        # ---- Public constants ------------------------------------------
 
         halt_on = ( t_defer.CancelledError, )
 
-        #---- Constructor ------------------------------------------------
+        # ---- Constructor -----------------------------------------------
 
         def __init__(self, *args, **kw):
             super().__init__(*args, **kw)
 
-        #---- Public hooks -----------------------------------------------
+        # ---- Public hooks ----------------------------------------------
 
         def buildfailureinspector(self):
             return self
@@ -240,16 +234,16 @@ class RetryingCaller(object):
         :class:`RetryingCaller` as a mix-in.
         """
 
-        #---- Public constants -------------------------------------------
+        # ---- Public constants ------------------------------------------
 
-        retry_on = ( TimeoutError, )
+        retry_on = ( DeferredTimeoutError, )
 
-        #---- Constructor ------------------------------------------------
+        # ---- Constructor -----------------------------------------------
 
         def __init__(self, *args, **kw):
             super().__init__(*args, **kw)
 
-        #---- Public hooks -----------------------------------------------
+        # ---- Public hooks ----------------------------------------------
 
         def buildfailureinspector(self):
             return self
@@ -273,14 +267,14 @@ class RetryingCaller(object):
 
             return failure, halt_now
 
-    #---- Private constants ----------------------------------------------
+    # ---- Private constants ---------------------------------------------
 
     _DEFAULT_BACKOFF_GENERATOR_FACTORY = DoublingBackoffGeneratorFactoryMixin()
     _DEFAULT_FAILURE_INSPECTOR_FACTORY = HaltOnFailureInspectorMixin()
 
-    #---- Constructor ----------------------------------------------------
+    # ---- Constructor ---------------------------------------------------
 
-    #=====================================================================
+    # ====================================================================
     def __init__(self, retries, backoff_generator_factory=_DEFAULT_BACKOFF_GENERATOR_FACTORY, failure_inspector_factory=_DEFAULT_FAILURE_INSPECTOR_FACTORY, log_lvl=SILENT, logger=_LOGGER, reactor=None):
         self._retries = retries
         self._log_lvl = log_lvl
@@ -293,9 +287,9 @@ class RetryingCaller(object):
 
         self._reactor = reactor
 
-    #---- Public hook methods --------------------------------------------
+    # ---- Public hook methods -------------------------------------------
 
-    #=====================================================================
+    # ====================================================================
     def __call__(self, _call):
         """
         Allows a :class:`RetryingCaller` object to be used as a
@@ -319,9 +313,9 @@ class RetryingCaller(object):
 
         return _retrywrapper
 
-    #---- Public methods -------------------------------------------------
+    # ---- Public methods ------------------------------------------------
 
-    #=====================================================================
+    # ====================================================================
     def retry(self, call, *args, **kw):
         """
         Retries ``call(*args, **kw)`` upon failure.
@@ -360,9 +354,9 @@ class RetryingCaller(object):
 
         return _retry()
 
-#---- Functions ----------------------------------------------------------
+# ---- Functions ---------------------------------------------------------
 
-#=========================================================================
+# ========================================================================
 def calltimeout(reactor, timeout, call, *args, **kw):
     """
     Shorthand for ``calltimeoutexc(reactor, timeout, call, None, *args,
@@ -370,14 +364,14 @@ def calltimeout(reactor, timeout, call, *args, **kw):
     """
     return calltimeoutexc(reactor, timeout, call, None, *args, **kw)
 
-#=========================================================================
+# ========================================================================
 def calltimeoutexc(reactor, timeout, call, timeout_exc, *args, **kw):
     """
     Calls :func:`twisted.internet.defer.maybeDeferred` on ``call``,
     ``args``, and ``kw`` and passes the result as the ``target_d``
     argument to :func:`deferredtimeout`.
 
-    :param reactor: the reactor to use; if `None`, then
+    :param reactor: the reactor to use; if :constant:`None`, then
         `twisted.internet.reactor` is used
 
     :type reactor: :class:`twisted.internet.interfaces.IReactorTime`
@@ -388,7 +382,7 @@ def calltimeoutexc(reactor, timeout, call, timeout_exc, *args, **kw):
     :param callable call: the callable
 
     :param Exception timeout_exc: the exception to raise instead of a
-        :exc:`TimeoutError`
+        :exc:`DeferredTimeoutError`
 
     :param args: passed to ``call``
 
@@ -399,16 +393,16 @@ def calltimeoutexc(reactor, timeout, call, timeout_exc, *args, **kw):
     """
     return deferredtimeout(reactor, timeout, t_defer.maybeDeferred(call, *args, **kw), timeout_exc)
 
-#=========================================================================
+# ========================================================================
 def deferredtimeout(reactor, timeout, target_d, timeout_exc=None):
     """
     Wraps ``target_d`` with a :class:`twisted.internet.defer.Deferred`
     that calls :meth:`~twisted.internet.defer.Deferred.cancel` on
     ``target_d`` and returns a :class:`twisted.python.failure.Failure`
-    with a :exc:`TimeoutError` after ``timeout`` seconds if ``target_d``
-    hasn't yet fired and ``timeout >= 0``.
+    with a :exc:`DeferredTimeoutError` after ``timeout`` seconds if
+    ``target_d`` hasn't yet fired and ``timeout >= 0``.
 
-    :param reactor: the reactor to use; if `None`, then
+    :param reactor: the reactor to use; if :constant:`None`, then
         `twisted.internet.reactor` is used
 
     :type reactor: :class:`twisted.internet.interfaces.IReactorTime`
@@ -421,7 +415,7 @@ def deferredtimeout(reactor, timeout, target_d, timeout_exc=None):
     :type target_d: :class:`twisted.internet.defer.Deferred`
 
     :param Exception timeout_exc: the exception to raise instead of a
-        :exc:`TimeoutError`
+        :exc:`DeferredTimeoutError`
 
     :returns: a :class:`twisted.internet.defer.Deferred` that wraps
         ``target_d`` if ``timeout >= 0``, otherwise ``target_d``
@@ -434,14 +428,14 @@ def deferredtimeout(reactor, timeout, target_d, timeout_exc=None):
 
     def _timeout():
         if timeout_exc is None:
-            exc = TimeoutError()
+            exc = DeferredTimeoutError()
             exc.target_d = target_d
         else:
             exc = timeout_exc
 
         try:
             raise exc
-        except Exception as exc: # pylint: disable=broad-except
+        except Exception as exc:  # pylint: disable=broad-except
             timeout_d.errback(exc)
 
         target_d.cancel()

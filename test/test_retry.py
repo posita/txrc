@@ -1,30 +1,24 @@
 #!/usr/bin/env python
-#-*- encoding: utf-8; grammar-ext: py; mode: python -*-
+# -*- encoding: utf-8; grammar-ext: py; mode: python -*-
 
-#=========================================================================
+# ========================================================================
 """
-  Copyright |(c)| 2015 `Matt Bogosian`_ (|@posita|_).
-
-  .. |(c)| unicode:: u+a9
-  .. _`Matt Bogosian`: mailto:mtb19@columbia.edu
-  .. |@posita| replace:: **@posita**
-  .. _`@posita`: https://github.com/posita
-
-  Please see the accompanying ``LICENSE`` (or ``LICENSE.txt``) file for
-  rights and restrictions governing use of this software. All rights not
-  expressly waived or licensed are reserved. If such a file did not
-  accompany this software, then please contact the author before viewing
-  or using this software in any capacity.
+Copyright and other protections apply. Please see the accompanying
+:doc:`LICENSE <LICENSE>` and :doc:`CREDITS <CREDITS>` file(s) for rights
+and restrictions governing use of this software. All rights not expressly
+waived or licensed are reserved. If those files are missing or appear to
+be modified from their originals, then please contact the author before
+viewing or using this software in any capacity.
 """
-#=========================================================================
+# ========================================================================
 
 from __future__ import (
     absolute_import, division, print_function, unicode_literals,
 )
-from builtins import * # pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
-from future.builtins.disabled import * # pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
+from builtins import *  # noqa: F401,F403; pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
+from future.builtins.disabled import *  # noqa: F401,F403; pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
 
-#---- Imports ------------------------------------------------------------
+# ---- Imports -----------------------------------------------------------
 
 import logging
 import sys
@@ -37,27 +31,27 @@ from twisted.trial import unittest as t_unittest
 
 from txrc.retry import (
     RetryingCaller,
-    TimeoutError,
+    DeferredTimeoutError,
     calltimeout,
     calltimeoutexc,
 )
-import tests # pylint: disable=unused-import
-from tests.symmetries import mock
+import test  # noqa: F401; pylint: disable=unused-import
+from test.symmetries import mock
 
-#---- Constants ----------------------------------------------------------
+# ---- Constants ---------------------------------------------------------
 
 __all__ = ()
 
 _LOGGER = logging.getLogger(__name__)
 
-#---- Classes ------------------------------------------------------------
+# ---- Classes -----------------------------------------------------------
 
-#=========================================================================
+# ========================================================================
 class CallTimeoutTestCase(t_unittest.TestCase):
 
     longMessage = True
 
-    #---- Public hooks ---------------------------------------------------
+    # ---- Public hooks --------------------------------------------------
 
     def setUp(self):
         super().setUp()
@@ -77,7 +71,7 @@ class CallTimeoutTestCase(t_unittest.TestCase):
         self. assertFailure(d, t_defer.CancelledError)
         self.assertFalse(self._state.fired)
         self.assertEqual(len(self._clock.getDelayedCalls()), 0)
-        d.addErrback(lambda _res: None) # silence the unhandled error
+        d.addErrback(lambda _res: None)  # silence the unhandled error
 
     def test_deferred_delayed(self):
         delay = 2
@@ -96,13 +90,13 @@ class CallTimeoutTestCase(t_unittest.TestCase):
         call_val = 'done'
         d = calltimeout(self._clock, delay, self._state.deferredcall, call_val)
         self._clock.advance(0)
-        self. assertFailure(d, TimeoutError)
+        self. assertFailure(d, DeferredTimeoutError)
         self.assertFalse(self._state.fired)
         self._clock.advance(2)
-        self. assertFailure(d, TimeoutError)
+        self. assertFailure(d, DeferredTimeoutError)
         self.assertFalse(self._state.fired)
         self.assertFalse(self._clock.getDelayedCalls())
-        d.addErrback(lambda _res: None) # silence the unhandled error
+        d.addErrback(lambda _res: None)  # silence the unhandled error
 
     def test_deferred_immediate_exc(self):
         delay = 0
@@ -112,7 +106,7 @@ class CallTimeoutTestCase(t_unittest.TestCase):
         self.assertIsInstance(d.result.value, ValueError)
         self.assertFalse(self._state.fired)
         self.assertFalse(self._clock.getDelayedCalls())
-        d.addErrback(lambda _res: None) # silence the unhandled error
+        d.addErrback(lambda _res: None)  # silence the unhandled error
 
     def test_deferred_negative_timeout(self):
         delay = -1
@@ -147,17 +141,17 @@ class CallTimeoutTestCase(t_unittest.TestCase):
         self.assertTrue(self._state.fired)
         self.assertFalse(self._clock.getDelayedCalls())
 
-    #---- Private inner classes ------------------------------------------
+    # ---- Private inner classes -----------------------------------------
 
     class _State(object):
 
-        #---- Constructor ------------------------------------------------
+        # ---- Constructor -----------------------------------------------
 
         def __init__(self, clock):
             self.clock = clock
             self.fired = False
 
-        #---- Public methods ---------------------------------------------
+        # ---- Public methods --------------------------------------------
 
         def deferredcall(self, val, wait_seconds=1):
             d = t_task.deferLater(self.clock, wait_seconds, self.nondeferredcall, val)
@@ -169,12 +163,12 @@ class CallTimeoutTestCase(t_unittest.TestCase):
 
             return val
 
-#=========================================================================
+# ========================================================================
 class RetryingCallerTestCase(t_unittest.TestCase):
 
     longMessage = True
 
-    #---- Public hooks ---------------------------------------------------
+    # ---- Public hooks --------------------------------------------------
 
     def setUp(self):
         super().setUp()
@@ -187,10 +181,10 @@ class RetryingCallerTestCase(t_unittest.TestCase):
     def test_first_error(self):
         err_msg = 'Weee!'
 
-        def _none(*_, **__): # pylint: disable=unused-argument
+        def _none(*_, **__):
             return
 
-        def _raise(*_, **__): # pylint: disable=unused-argument
+        def _raise(*_, **__):
             raise RuntimeError(err_msg)
 
         def _call():
@@ -203,7 +197,7 @@ class RetryingCallerTestCase(t_unittest.TestCase):
         self._clock.advance(0)
         self. assertFailure(d, RuntimeError)
         self.assertEqual(d.result.args, ( err_msg, ))
-        d.addErrback(lambda _res: None) # silence the unhandled error
+        d.addErrback(lambda _res: None)  # silence the unhandled error
 
     def test_retry(self):
         retries = 5
@@ -223,7 +217,7 @@ class RetryingCallerTestCase(t_unittest.TestCase):
 
         dl = t_defer.DeferredList(( d_0, d_1, d_2 ), consumeErrors=True)
         self._clock.advance(0)
-        self._clock.pump(RetryingCaller.DoublingBackoffGeneratorFactoryMixin._basegenerator(retries + 1)) # pylint: disable=protected-access
+        self._clock.pump(RetryingCaller.DoublingBackoffGeneratorFactoryMixin._basegenerator(retries + 1))  # pylint: disable=protected-access
 
         self.assertTrue(d_0.called)
         self.assertTrue(d_1.called)
@@ -263,25 +257,25 @@ class RetryingCallerTestCase(t_unittest.TestCase):
         d = retrier.retry(call)
         self._clock.advance(0)
         d.cancel()
-        self._clock.pump(RetryingCaller.DoublingBackoffGeneratorFactoryMixin._basegenerator(retries + 1)) # pylint: disable=protected-access
+        self._clock.pump(RetryingCaller.DoublingBackoffGeneratorFactoryMixin._basegenerator(retries + 1))  # pylint: disable=protected-access
 
         expected = [ (), ]
         self.assertEqual(call.call_args_list, expected)
         self.assertFailure(d, t_defer.CancelledError)
-        d.addErrback(lambda _res: None) # silence the unhandled error
+        d.addErrback(lambda _res: None)  # silence the unhandled error
 
     def test_retry_on(self):
-        errors = ( TimeoutError, TimeoutError, t_defer.CancelledError )
+        errors = ( DeferredTimeoutError, DeferredTimeoutError, t_defer.CancelledError )
 
         retries = len(errors) + 1
         failure_inspector = RetryingCaller.RetryOnFailureInspectorMixin()
-        failure_inspector.retry_on = ( TimeoutError, )
+        failure_inspector.retry_on = ( DeferredTimeoutError, )
         retrier = RetryingCaller(retries, failure_inspector_factory=failure_inspector, reactor=self._clock)
 
         error_raiser = mock.Mock(side_effect=errors)
         d = retrier.retry(error_raiser, -273)
         self._clock.advance(0)
-        self._clock.pump(RetryingCaller.DoublingBackoffGeneratorFactoryMixin._basegenerator(retries)) # pylint: disable=protected-access
+        self._clock.pump(RetryingCaller.DoublingBackoffGeneratorFactoryMixin._basegenerator(retries))  # pylint: disable=protected-access
 
         expected = [
             ( ( -273, ), ),
@@ -292,9 +286,9 @@ class RetryingCallerTestCase(t_unittest.TestCase):
         self.assertTrue(d.called)
         self.assertEqual(error_raiser.call_args_list, expected)
         self.assertFailure(d, t_defer.CancelledError)
-        d.addErrback(lambda _res: None) # silence the unhandled error
+        d.addErrback(lambda _res: None)  # silence the unhandled error
 
-#---- Initialization -----------------------------------------------------
+# ---- Initialization ----------------------------------------------------
 
 if __name__ == '__main__':
     from unittest import main

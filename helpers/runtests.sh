@@ -1,4 +1,5 @@
-# -*- encoding: utf-8; mode: ini -*-
+#!/usr/bin/env sh
+# -*- encoding: utf-8; grammar-ext: sh; mode: shell-script -*-
 
 # ========================================================================
 # Copyright and other protections apply. Please see the accompanying
@@ -9,10 +10,9 @@
 # software in any capacity.
 # ========================================================================
 
-[MESSAGES CONTROL]
-disable=C,R,fixme,locally-disabled,missing-super-argument,no-init,no-member
-enable=useless-suppression
-zope=yes
-
-[REPORTS]
-reports=n
+_REPO_DIR="$( cd "$( dirname "${0}" )" && pwd )/.."
+set -ex
+[ -d "${_REPO_DIR}" ]
+[ "${_REPO_DIR}/helpers/runtests.sh" -ef "${0}" ]
+cd "${_REPO_DIR}"
+exec tox "${@}"

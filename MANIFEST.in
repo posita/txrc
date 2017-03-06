@@ -1,4 +1,4 @@
-# -*- encoding: utf-8; mode: ini -*-
+# -*- encoding: utf-8 -*-
 
 # ========================================================================
 # Copyright and other protections apply. Please see the accompanying
@@ -9,10 +9,7 @@
 # software in any capacity.
 # ========================================================================
 
-[MESSAGES CONTROL]
-disable=C,R,fixme,locally-disabled,missing-super-argument,no-init,no-member
-enable=useless-suppression
-zope=yes
-
-[REPORTS]
-reports=n
+include \
+    CREDITS \
+    LICENSE \
+    test/requirements.txt

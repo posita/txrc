@@ -1,50 +1,48 @@
-#-*- encoding: utf-8; mode: yaml -*-
+# -*- encoding: utf-8; mode: yaml -*-
 
-#=========================================================================
-# Copyright (c) 2015 Matt Bogosian <mtb19@columbia.edu>.
-#
-# Please see the accompanying LICENSE (or LICENSE.txt) file for rights and
-# restrictions governing use of this software. All rights not expressly
-# waived or licensed are reserved. If such a file did not accompany this
-# software, then please contact the author before viewing or using this
+# ========================================================================
+# Copyright and other protections apply. Please see the accompanying
+# ``LICENSE`` and ``CREDITS`` files for rights and restrictions governing
+# use of this software. All rights not expressly waived or licensed are
+# reserved. If those files are missing or appear to be modified from their
+# originals, then please contact the author before viewing or using this
 # software in any capacity.
-#=========================================================================
+# ========================================================================
 
+sudo: false
 language: python
-python: "3.4"
+
+python:
+    - "2.7"
+    - "3.3"
+    - "3.4"
+    - "3.5"
+    - "3.6"
+    - "pypy"
+    - "pypy3"
+
+env:
+    - TWISTED="15"
+    - TWISTED="16"
+    - TWISTED="17.1"
+    - TWISTED="trunk"
 
 install:
-    - pip install coveralls tox
-
-# Grrr; <https://github.com/travis-ci/travis-ci/issues/1519> is closed
-# without a fix
-env:
-    - TOX_ENV=py27-twisted_15_3
-    - TOX_ENV=py27-twisted_15_4
-    - TOX_ENV=py27-twisted_trunk
-
-    - TOX_ENV=pypy-twisted_15_3
-    - TOX_ENV=pypy-twisted_15_4
-    - TOX_ENV=pypy-twisted_trunk
-
-    - TOX_ENV=py33-twisted_15_3
-    - TOX_ENV=py33-twisted_15_4
-    - TOX_ENV=py33-twisted_trunk
-
-    - TOX_ENV=py34-twisted_15_3
-    - TOX_ENV=py34-twisted_15_4
-    - TOX_ENV=py34-twisted_trunk
+    - pip install coveralls tox-travis
 
 matrix:
     allow_failures:
+        # 3.6 is experimental (needs pylint >= 2.0)
+        - python: "3.6"
+
+        # PyPy3 is experimental
+        - python: "pypy3"
+
         # Twisted trunk is experimental
-        - env: TOX_ENV=py27-twisted_trunk
-        - env: TOX_ENV=pypy-twisted_trunk
-        - env: TOX_ENV=py33-twisted_trunk
-        - env: TOX_ENV=py34-twisted_trunk
+        - env: TWISTED="trunk"
 
 script:
-    - tox -e "${TOX_ENV}"
+    - tox
 
 after_success:
     - coveralls

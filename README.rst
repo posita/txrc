@@ -6,21 +6,15 @@
     It looks like crap in a text editor, but it has no effect on rendering, and it allows much more useful diffs.
     Thank you!
 
-Copyright |(c)| 2015 `Matt Bogosian`_ (|@posita|_).
-
-.. |(c)| unicode:: u+a9
-.. _`Matt Bogosian`: mailto:mtb19@columbia.edu?Subject=txrc
-.. |@posita| replace:: **@posita**
-.. _`@posita`: https://github.com/posita
-
-Please see the accompanying |LICENSE|_ (or |LICENSE.txt|_) file for rights and restrictions governing use of this software.
+Copyright and other protections apply.
+Please see the accompanying |LICENSE|_ and |CREDITS|_ file(s) for rights and restrictions governing use of this software.
 All rights not expressly waived or licensed are reserved.
-If such a file did not accompany this software, then please contact the author before viewing or using this software in any capacity.
+If those files are missing or appear to be modified from their originals, then please contact the author before viewing or using this software in any capacity.
 
 .. |LICENSE| replace:: ``LICENSE``
 .. _`LICENSE`: LICENSE
-.. |LICENSE.txt| replace:: ``LICENSE.txt``
-.. _`LICENSE.txt`: LICENSE
+.. |CREDITS| replace:: ``CREDITS``
+.. _`CREDITS`: CREDITS
 
 .. image:: https://travis-ci.org/posita/txrc.svg?branch=master
     :target: https://travis-ci.org/posita/txrc?branch=master
@@ -68,6 +62,7 @@ Jeff Knupp (|@jeffknupp|_) `describes how <https://www.jeffknupp.com/blog/2013/0
 ``txrc`` enables retrying calls in `Twisted <https://twistedmatrix.com/>`_.
 It is based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11/12/twisted-code-for-retrying-function-calls/>`__.
 It is licensed under the `MIT License <https://opensource.org/licenses/MIT>`_.
+See the |LICENSE|_ file for details.
 Source code is `available on GitHub <https://github.com/posita/txrc>`__.
 See `the docs <https://txrc.readthedocs.org/en/master/>`__ for more information.
 
