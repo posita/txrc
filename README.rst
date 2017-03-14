@@ -16,12 +16,12 @@ If those files are missing or appear to be modified from their originals, then p
 .. |CREDITS| replace:: ``CREDITS``
 .. _`CREDITS`: CREDITS
 
-.. image:: https://travis-ci.org/posita/txrc.svg?branch=master
-    :target: https://travis-ci.org/posita/txrc?branch=master
+.. image:: https://travis-ci.org/posita/txrc.svg?branch=v0.2.3
+    :target: https://travis-ci.org/posita/txrc?branch=v0.2.3
     :alt: [Build Status]
 
-.. image:: https://coveralls.io/repos/posita/txrc/badge.svg?branch=master
-    :target: https://coveralls.io/r/posita/txrc?branch=master
+.. image:: https://coveralls.io/repos/posita/txrc/badge.svg?branch=v0.2.3
+    :target: https://coveralls.io/r/posita/txrc?branch=v0.2.3
     :alt: [Coverage Status]
 
 Curious about integrating your project with the above services?
@@ -33,29 +33,29 @@ Jeff Knupp (|@jeffknupp|_) `describes how <https://www.jeffknupp.com/blog/2013/0
 ``txrc`` - Twisted Retrying Caller Inspired by Terry Jones
 ==========================================================
 
-.. image:: https://img.shields.io/pypi/v/txrc.svg
+.. image:: https://img.shields.io/pypi/v/txrc/0.2.3.svg
     :target: https://pypi.python.org/pypi/txrc
-    :alt: [master Version]
+    :alt: [v0.2.3 Version]
 
-.. image:: https://readthedocs.org/projects/txrc/badge/?version=master
-    :target: https://txrc.readthedocs.org/en/master/
-    :alt: [master Documentation]
+.. image:: https://readthedocs.org/projects/txrc/badge/?version=v0.2.3
+    :target: https://txrc.readthedocs.org/en/v0.2.3/
+    :alt: [v0.2.3 Documentation]
 
-.. image:: https://img.shields.io/pypi/l/txrc.svg
+.. image:: https://img.shields.io/pypi/l/txrc/0.2.3.svg
     :target: http://opensource.org/licenses/MIT
-    :alt: [master License]
+    :alt: [v0.2.3 License]
 
-.. image:: https://img.shields.io/pypi/pyversions/txrc.svg
+.. image:: https://img.shields.io/pypi/pyversions/txrc/0.2.3.svg
     :target: https://pypi.python.org/pypi/txrc
-    :alt: [master Supported Python Versions]
+    :alt: [v0.2.3 Supported Python Versions]
 
-.. image:: https://img.shields.io/pypi/implementation/txrc.svg
+.. image:: https://img.shields.io/pypi/implementation/txrc/0.2.3.svg
     :target: https://pypi.python.org/pypi/txrc
-    :alt: [master Supported Python Implementations]
+    :alt: [v0.2.3 Supported Python Implementations]
 
-.. image:: https://img.shields.io/pypi/status/txrc.svg
+.. image:: https://img.shields.io/pypi/status/txrc/0.2.3.svg
     :target: https://pypi.python.org/pypi/txrc
-    :alt: [master Development Stage]
+    :alt: [v0.2.3 Development Stage]
 
 ..
 
@@ -64,7 +64,7 @@ It is based on `Terry Jones's proposal <http://blogs.fluidinfo.com/terry/2009/11
 It is licensed under the `MIT License <https://opensource.org/licenses/MIT>`_.
 See the |LICENSE|_ file for details.
 Source code is `available on GitHub <https://github.com/posita/txrc>`__.
-See `the docs <https://txrc.readthedocs.org/en/master/>`__ for more information.
+See `the docs <https://txrc.readthedocs.org/en/v0.2.3/>`__ for more information.
 
 Examples
 --------
@@ -77,4 +77,4 @@ Issues
 ------
 
 If you find a bug, or want a feature, please `file an issue <https://github.com/posita/txrc/issues>`__ (if it hasn't already been filed).
-If you're willing and able, consider `contributing <https://txrc.readthedocs.org/en/master/contrib.html>`__.
+If you're willing and able, consider `contributing <https://txrc.readthedocs.org/en/v0.2.3/contrib.html>`__.
