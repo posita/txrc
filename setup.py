@@ -63,7 +63,7 @@ with codecs.open(os.path.join(_MY_DIR, 'README.rst'), encoding='utf-8') as _read
 __vers_str__ = _namespace.get('__vers_str__')
 __release__ = _namespace.get('__release__', __vers_str__)
 
-_SETUP_ARGS = {
+SETUP_ARGS = {
     'name': 'txrc',
     'version': __vers_str__,
     'author': 'Matt Bogosian',
@@ -100,4 +100,4 @@ _SETUP_ARGS = {
 
 if __name__ == '__main__':
     os.environ['COVERAGE_PROCESS_START'] = os.environ.get('COVERAGE_PROCESS_START', os.path.join(_MY_DIR, '.coveragerc'))
-    setuptools.setup(**_SETUP_ARGS)
+    setuptools.setup(**SETUP_ARGS)

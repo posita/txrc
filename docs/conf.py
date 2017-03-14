@@ -24,10 +24,10 @@
 import os.path
 import sys
 sys.path.append(os.path.pardir)
-from setup import _SETUP_ARGS
+from setup import SETUP_ARGS
 # _setup = {}
 # execfile(os.path.join(os.getcwd(), os.path.pardir, 'setup.py'), _setup, _setup)
-# _SETUP_ARGS = _setup['_SETUP_ARGS']
+# SETUP_ARGS = _setup['SETUP_ARGS']
 
 # -- General configuration ------------------------------------------------
 
@@ -57,8 +57,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = _SETUP_ARGS['name']
-author = _SETUP_ARGS['author']
+project = SETUP_ARGS['name']
+author = SETUP_ARGS['author']
 copyright = u'2015-2017, {}'.format(author)
 
 # The version info for the project you're documenting, acts as replacement for
@@ -66,7 +66,7 @@ copyright = u'2015-2017, {}'.format(author)
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-release = _SETUP_ARGS['version']
+release = SETUP_ARGS['version']
 # The short X.Y version.
 version = '.'.join(release.split('.')[:2])
 
@@ -160,8 +160,8 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, '{}'.format(project), '{} Documentation'.format(project),
-     author, project, _SETUP_ARGS['description'],
-     _SETUP_ARGS['classifiers'][0]),
+     author, project, SETUP_ARGS['description'],
+     SETUP_ARGS['classifiers'][0]),
 ]
 
 

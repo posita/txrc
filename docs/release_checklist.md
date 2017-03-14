@@ -17,9 +17,9 @@ If those files are missing or appear to be modified from their originals, then p
 
 - [ ] `git push --tags`
 
-- [ ] `python setup.py sdist upload`
+- [ ] `python3.x setup.py bdist_wheel sdist && python2.7 setup.py bdist_wheel`
 
-- [ ] Upload `txrc.egg-info/PKG-INFO` to [`https://pypi.python.org/pypi?:action=submit_form&name=txrc&version=X.Y.Z`](https://pypi.python.org/pypi?:action=submit_form&name=txrc&version=X.Y.Z), if necessary (work-around)
+- [ ] `twine upload`
 
 - [ ] `git checkout master`
 

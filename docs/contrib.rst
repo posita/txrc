@@ -54,10 +54,10 @@ There are only a few guidelines:
     (There are exceptions, but if there is any doubt, they probably don't apply.)
 
     Unit tests live in ``./test``.
-    Tests can be run with ``tox [-e TOX_ENV]`` (requires `tox <https://tox.readthedocs.org/en/latest/>`_) or ``"${PYTHON:-python}" setup.py test``.
+    Tests can be run with ``tox [-e TOX_ENV]`` (requires `Tox <https://tox.readthedocs.org/en/latest/>`_) or ``"${PYTHON:-python}" setup.py test``.
 
     There are two helper scripts that may be of interest.
-    To set up a virtual environment (via ``virtualenv``) for development and to run unit tests using _`tox` from that virtual environment, you can do the following:
+    To set up a virtual environment (via ``virtualenv``) for development and to run unit tests using `Tox`_ from that virtual environment, you can do the following:
 
     .. code-block:: sh
 

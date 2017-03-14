@@ -22,7 +22,7 @@ if [ "${#}" -ne 3 ] ; then
     exit 1
 fi
 
-_PKG='txrc'
+PKG="$( python -c 'import setup ; print(setup.SETUP_ARGS["name"])' )"
 MAJOR="${1}"
 MINOR="${2}"
 PATCH="${3}"
@@ -31,7 +31,7 @@ TAG="v${VERS}"
 
 set -ex
 git checkout -b "${VERS}-release"
-perl -pi -e 's{^__version__\s*=\s*\(\s*0,\s*0,\s*0\s*\)$}{__version__ = ( '"${MAJOR}"', '"${MINOR}"', '"${PATCH}"' )}g ;' "${_PKG}/version.py"
-perl -pi -e 's{master}{'"${TAG}"'}g ; s{pypi/([^/]+/)'"${_PKG}"'(\.svg)?$}{pypi/\1'"${_PKG}"'/'"${VERS}"'\2}g' README.rst
+perl -pi -e 's{^__version__\s*=\s*\(\s*0,\s*0,\s*0\s*\)$}{__version__ = ( '"${MAJOR}"', '"${MINOR}"', '"${PATCH}"' )}g ;' "${PKG}/version.py"
+perl -pi -e 's{master}{'"${TAG}"'}g ; s{pypi/([^/]+/)'"${PKG}"'(\.svg)?$}{pypi/\1'"${PKG}"'/'"${VERS}"'\2}g' README.rst
 git commit --all --message "Update version and release ${TAG}."
 git tag --sign --force --message "Release ${TAG}." "${TAG}"
