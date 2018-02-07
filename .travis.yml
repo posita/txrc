@@ -14,7 +14,6 @@ language: python
 
 python:
     - "2.7"
-    - "3.3"
     - "3.4"
     - "3.5"
     - "3.6"
@@ -25,6 +24,8 @@ env:
     - TWISTED="15"
     - TWISTED="16"
     - TWISTED="17.1"
+    - TWISTED="17.5"
+    - TWISTED="17.9"
     - TWISTED="trunk"
 
 install:
@@ -32,12 +33,6 @@ install:
 
 matrix:
     allow_failures:
-        # 3.6 is experimental (needs pylint >= 2.0)
-        - python: "3.6"
-
-        # PyPy3 is experimental
-        - python: "pypy3"
-
         # Twisted trunk is experimental
         - env: TWISTED="trunk"
 

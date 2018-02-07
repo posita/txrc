@@ -25,8 +25,8 @@ its use herein is permitted under the `CC0 1.0 License`_.
 from __future__ import (
     absolute_import, division, print_function, unicode_literals,
 )
-from builtins import *  # noqa: F401,F403; pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
-from future.builtins.disabled import *  # noqa: F401,F403; pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
+from builtins import *  # noqa: F401,F403 # pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
+from future.builtins.disabled import *  # noqa: F401,F403 # pylint: disable=no-name-in-module,redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
 
 # ---- Imports -----------------------------------------------------------
 
@@ -165,11 +165,6 @@ class RetryingCaller(object):
         for a :class:`RetryingCaller` as a mix-in.
         """
 
-        # ---- Constructor -----------------------------------------------
-
-        def __init__(self, *args, **kw):
-            super().__init__(*args, **kw)
-
         # ---- Public hooks ----------------------------------------------
 
         def buildbackoffgenerator(self, retries):
@@ -197,11 +192,6 @@ class RetryingCaller(object):
         # ---- Public constants ------------------------------------------
 
         halt_on = ( t_defer.CancelledError, )
-
-        # ---- Constructor -----------------------------------------------
-
-        def __init__(self, *args, **kw):
-            super().__init__(*args, **kw)
 
         # ---- Public hooks ----------------------------------------------
 
@@ -237,11 +227,6 @@ class RetryingCaller(object):
         # ---- Public constants ------------------------------------------
 
         retry_on = ( DeferredTimeoutError, )
-
-        # ---- Constructor -----------------------------------------------
-
-        def __init__(self, *args, **kw):
-            super().__init__(*args, **kw)
 
         # ---- Public hooks ----------------------------------------------
 

@@ -15,8 +15,8 @@ viewing or using this software in any capacity.
 from __future__ import (
     absolute_import, division, print_function, unicode_literals,
 )
-from builtins import *  # noqa: F401,F403; pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
-from future.builtins.disabled import *  # noqa: F401,F403; pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
+from builtins import *  # noqa: F401,F403 # pylint: disable=redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
+from future.builtins.disabled import *  # noqa: F401,F403 # pylint: disable=no-name-in-module,redefined-builtin,unused-wildcard-import,useless-suppression,wildcard-import
 
 # ---- Imports -----------------------------------------------------------
 
@@ -29,7 +29,7 @@ from txrc.logging import (
     logerrbackdl,
     logunhandlederr,
 )
-import test  # noqa: F401; pylint: disable=unused-import
+import test  # noqa: F401 # pylint: disable=unused-import
 from test.symmetries import mock
 
 # ---- Constants ---------------------------------------------------------
@@ -46,12 +46,6 @@ class LoggingTestCase(t_unittest.TestCase):
     longMessage = True
 
     # ---- Public hooks --------------------------------------------------
-
-    def setUp(self):
-        super().setUp()
-
-    def tearDown(self):
-        super().tearDown()
 
     def test_logunhandlederr(self):
         logger = mock.Mock()
